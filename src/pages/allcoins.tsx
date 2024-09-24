@@ -39,7 +39,7 @@ export default function AllCoins() {
   useEffect(() => {
     async function fetchAllCoins() {
       try {
-        const { data } = await api.get("/cryptocurrency/map", {
+        const { data } = await api.get("/allcoins", {
           params: {
             start: 1,
             limit: 3000,
