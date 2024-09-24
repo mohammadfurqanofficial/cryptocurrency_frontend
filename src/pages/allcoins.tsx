@@ -1,17 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex, Table, Text } from "@chakra-ui/react";
+import { Flex, Table, Text, Button } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { AxiosResponseCoins, CriptoResponse } from "../type/cripto";
-import { TableComponentBody } from "../components/TableComponentBody";
-import { TableComponentHeader } from "../components/TableComponentHeader/TableComponentHeader";
-import { Header } from "../components/Header";
 import { api } from "../services/apiClient";
 import { SEO } from "../SEO/index";
 
+interface CoinData {
+  id: number;
+  rank: number;
+  name: string;
+  symbol: string;
+  is_active: number;
+  last_historical_data: string;
+}
+
 export default function AllCoins() {
-  const [coins, setCoins] = useState<CriptoResponse[]>([]);
-  const [page, setPage] = useState(1);
+  const [coins, setCoins] = useState<CoinData[]>([]);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const router = useRouter();
 
@@ -41,7 +45,7 @@ export default function AllCoins() {
             limit: 3000,
           },
           headers: {
-            "X-CMC_PRO_API_KEY": process.env.NEXT_PUBLIC_CMC_API_KEY, // Ensure your API key is set in .env.local
+            "X-CMC_PRO_API_KEY": process.env.NEXT_PUBLIC_CMC_API_KEY, // API Key from .env.local
           },
         });
         setCoins(data.data); // Assuming the API returns data in this structure
@@ -53,11 +57,14 @@ export default function AllCoins() {
     fetchAllCoins();
   }, []);
 
+  const handleAddToFavorites = (coinId: number) => {
+    // Logic to add coin to favorites (You can manage this with local storage or call an API)
+    console.log("Added to favorites: ", coinId);
+  };
+
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
       <SEO />
-      <Header page={page} setPage={setPage} />
-
       {user && (
         <Flex
           p={4}
@@ -72,8 +79,37 @@ export default function AllCoins() {
       )}
 
       <Table variant="simple" size="sm">
-        <TableComponentHeader />
-        <TableComponentBody cripto={coins} /> {/* Assuming TableComponentBody can handle this structure */}
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Symbol</th>
+            <th>Active</th>
+            <th>Last Update</th>
+            <th>Favorite</th>
+          </tr>
+        </thead>
+        <tbody>
+          {coins.map((coin) => (
+            <tr key={coin.id}>
+              <td>{coin.id}</td>
+              <td>{coin.rank}</td>
+              <td>{coin.name}</td>
+              <td>{coin.symbol}</td>
+              <td>{coin.is_active ? "Yes" : "No"}</td>
+              <td>{new Date(coin.last_historical_data).toLocaleString()}</td>
+              <td>
+                <Button
+                  size="sm"
+                  onClick={() => handleAddToFavorites(coin.id)}
+                >
+                  Add to Favorite
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </Table>
     </Flex>
   );
