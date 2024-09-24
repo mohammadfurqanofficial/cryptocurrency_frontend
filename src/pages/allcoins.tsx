@@ -61,7 +61,7 @@ export default function AllCoins() {
   }, []);
 
   // Function to handle adding a coin to favorites
-  const handleAddToFavorites = async (coinId: number) => {
+  const handleAddToFavorites = async (coinId: number, name: string, symbol: string, rank: number) => {
     try {
       const cookies = parseCookies();
       const token = cookies["cripto.auth"]; // Get the auth token from cookies
@@ -73,7 +73,7 @@ export default function AllCoins() {
   
       const response = await api.post(
         "/favorites/add",
-        { coinId },
+        { coinId, name, symbol, rank },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -116,12 +116,13 @@ export default function AllCoins() {
     }
   };
 
-  // Function to toggle favorite status
-  const toggleFavorite = (coinId: number) => {
+  const toggleFavorite = async (coinId: number, name: string, symbol: string, rank: number) => {
     if (favorites.includes(coinId)) {
-      handleRemoveFromFavorites(coinId);
+      await handleRemoveFromFavorites(coinId);
+      setFavorites(favorites.filter(id => id !== coinId));
     } else {
-      handleAddToFavorites(coinId);
+      await handleAddToFavorites(coinId, name, symbol, rank);
+      setFavorites([...favorites, coinId]);
     }
   };
 
@@ -161,11 +162,11 @@ export default function AllCoins() {
               <td>{coin.symbol}</td>
               <td>{new Date(coin.last_historical_data).toLocaleString()}</td>
               <td>
-                <Button
+              <Button
                   size="sm"
-                  onClick={() => toggleFavorite(coin.id)}
+                  onClick={() => toggleFavorite(coin.id, coin.name, coin.symbol, coin.rank)}
                 >
-                  {favorites.includes(coin.id) ? "Remove from Favorites" : "Add to Favorites"}
+                  {favorites.includes(coin.id) ? "Remove from Favorite" : "Add to Favorite"}
                 </Button>
               </td>
             </tr>
