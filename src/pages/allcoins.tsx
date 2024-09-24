@@ -11,6 +11,7 @@ import { SEO } from "../SEO/index";
 
 export default function AllCoins() {
   const [coins, setCoins] = useState<CriptoResponse[]>([]);
+  const [page, setPage] = useState(1);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const router = useRouter();
 
