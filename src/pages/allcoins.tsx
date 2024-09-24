@@ -19,6 +19,7 @@ interface CoinData {
 export default function AllCoins() {
   const [coins, setCoins] = useState<CoinData[]>([]);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [favorites, setFavorites] = useState<number[]>([]); // State to track favorite coins
   const router = useRouter();
 
   useEffect(() => {
@@ -59,9 +60,9 @@ export default function AllCoins() {
     fetchAllCoins();
   }, []);
 
+  // Function to handle adding a coin to favorites
   const handleAddToFavorites = async (coinId: number) => {
     try {
-      // Parse cookies
       const cookies = parseCookies();
       const token = cookies["cripto.auth"]; // Get the auth token from cookies
   
@@ -81,12 +82,48 @@ export default function AllCoins() {
       );
   
       toast.success(response.data.message); // Show success message
+      setFavorites((prev) => [...prev, coinId]); // Update favorites state
     } catch (error) {
       toast.error("Failed to add coin to favorites."); // Show error message
     }
   };
+
+  // Function to handle removing a coin from favorites
+  const handleRemoveFromFavorites = async (coinId: number) => {
+    try {
+      const cookies = parseCookies();
+      const token = cookies["cripto.auth"]; // Get the auth token from cookies
   
+      if (!token) {
+        toast.error("You need to be logged in to remove favorites.");
+        return;
+      }
   
+      const response = await api.post(
+        "/favorites/remove",
+        { coinId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      toast.success(response.data.message); // Show success message
+      setFavorites((prev) => prev.filter((id) => id !== coinId)); // Update favorites state
+    } catch (error) {
+      toast.error("Failed to remove coin from favorites."); // Show error message
+    }
+  };
+
+  // Function to toggle favorite status
+  const toggleFavorite = (coinId: number) => {
+    if (favorites.includes(coinId)) {
+      handleRemoveFromFavorites(coinId);
+    } else {
+      handleAddToFavorites(coinId);
+    }
+  };
 
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
@@ -111,7 +148,6 @@ export default function AllCoins() {
             <th>Rank</th>
             <th>Name</th>
             <th>Symbol</th>
-            {/* <th>Active</th> */}
             <th>Last Update</th>
             <th>Favorite</th>
           </tr>
@@ -123,14 +159,13 @@ export default function AllCoins() {
               <td>{coin.rank}</td>
               <td>{coin.name}</td>
               <td>{coin.symbol}</td>
-              {/* <td>{#coin.is_active ? "Yes" : "No"}</td> */}
               <td>{new Date(coin.last_historical_data).toLocaleString()}</td>
               <td>
                 <Button
                   size="sm"
-                  onClick={() => handleAddToFavorites(coin.id)}
+                  onClick={() => toggleFavorite(coin.id)}
                 >
-                  Add to Favorite
+                  {favorites.includes(coin.id) ? "Remove from Favorites" : "Add to Favorites"}
                 </Button>
               </td>
             </tr>
