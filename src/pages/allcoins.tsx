@@ -71,7 +71,7 @@ export default function AllCoins() {
       }
   
       const response = await api.post(
-        "/api/favorites/add",
+        "/favorites/add",
         { coinId },
         {
           headers: {
