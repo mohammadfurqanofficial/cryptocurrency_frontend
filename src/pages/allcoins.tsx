@@ -3,6 +3,8 @@ import { Flex, Table, Text, Button } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { api } from "../services/apiClient";
+import { parseCookies } from "nookies"; // If you're using cookies for authentication
+import toast from "react-hot-toast";
 import { SEO } from "../SEO/index";
 
 interface CoinData {
@@ -57,10 +59,34 @@ export default function AllCoins() {
     fetchAllCoins();
   }, []);
 
-  const handleAddToFavorites = (coinId: number) => {
-    // Logic to add coin to favorites (You can manage this with local storage or call an API)
-    console.log("Added to favorites: ", coinId);
+  const handleAddToFavorites = async (coinId: number) => {
+    try {
+      // Parse cookies
+      const cookies = parseCookies();
+      const token = cookies["cripto.auth"]; // Get the auth token from cookies
+  
+      if (!token) {
+        toast.error("You need to be logged in to add favorites.");
+        return;
+      }
+  
+      const response = await api.post(
+        "/api/favorites/add",
+        { coinId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      toast.success(response.data.message); // Show success message
+    } catch (error) {
+      toast.error("Failed to add coin to favorites."); // Show error message
+    }
   };
+  
+  
 
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
