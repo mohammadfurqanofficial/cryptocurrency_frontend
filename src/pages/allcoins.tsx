@@ -85,7 +85,7 @@ export default function AllCoins() {
             <th>Rank</th>
             <th>Name</th>
             <th>Symbol</th>
-            <th>Active</th>
+            {/* <th>Active</th> */}
             <th>Last Update</th>
             <th>Favorite</th>
           </tr>
@@ -97,7 +97,7 @@ export default function AllCoins() {
               <td>{coin.rank}</td>
               <td>{coin.name}</td>
               <td>{coin.symbol}</td>
-              <td>{coin.is_active ? "Yes" : "No"}</td>
+              {/* <td>{#coin.is_active ? "Yes" : "No"}</td> */}
               <td>{new Date(coin.last_historical_data).toLocaleString()}</td>
               <td>
                 <Button
