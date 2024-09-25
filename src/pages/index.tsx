@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Flex, Table, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router"; 
@@ -35,30 +36,21 @@ export default function Home() {
   useEffect(() => {
     async function fetchFavorites() {
       try {
-        const response = await api.get<AxiosResponseCoins>(`/favorites`, {
+        const response = await api.get<CriptoResponse[]>(`/favorites`, {
           params: {
             start: page - 1,
           },
         });
-  
-        // Log the whole response to understand its structure
-        console.log("Response data:", response.data); 
-  
-        // Check if the response has a valid structure before accessing filter
-        if (response.data && Array.isArray(response.data.filter)) {
-          setCripto(response.data.filter);
-        } else {
-          console.warn("Expected 'filter' to be an array but got:", response.data.filter);
-          setCripto([]); // Set to an empty array if filter is not available
-        }
+
+        // Assuming the response is directly an array of CriptoResponse
+        setCripto(response.data || []);
       } catch (e: any) {
-        console.log("Error fetching favorites:", e.message);
+        console.log(e.message);
       }
     }
-  
+
     fetchFavorites();
   }, [page]);
-  
 
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
