@@ -39,7 +39,7 @@ export default function Home() {
       setCripto([]);
       try {
         const { data } = await api.get<AxiosResponseCoins>(
-          `/api/favorites`,
+          `/coin/filter/front`,
           {
             params: {
               start: page - 1,
