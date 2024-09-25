@@ -1,30 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Flex, Table, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router"; // Import useRouter
-import { AxiosResponseCoins, CriptoResponse } from "../type/cripto";
+import { useRouter } from "next/router"; 
+import { AxiosResponseCoins, CriptoResponse, FavoriteCoin } from "../type/cripto"; // Ensure FavoriteCoin is imported
 import { TableComponentBody } from "../components/TableComponentBody";
 import { TableComponentHeader } from "../components/TableComponentHeader/TableComponentHeader";
-import { Progress } from "../components/Progress";
 import { Header } from "../components/Header";
 import { api } from "../services/apiClient";
 import { SEO } from "../SEO/index";
 
 export default function Home() {
   const [cripto, setCripto] = useState<CriptoResponse[]>([]);
+  const [favoriteCoins, setFavoriteCoins] = useState<FavoriteCoin[]>([]); // Use the FavoriteCoin type
   const [page, setPage] = useState(1);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter(); 
 
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const { data } = await api.get("/auth/profile"); // Adjust the endpoint if necessary
-        setUser(data); // Assuming the API returns { name: string, email: string }
+        const { data } = await api.get("/auth/profile");
+        setUser(data);
       } catch (e: any) {
-        // Check if the error indicates that the user is not authenticated
         if (e.response && e.response.status === 401) {
-          router.push("/login"); // Redirect to login page
+          router.push("/login");
         } else {
           console.log(e.message);
         }
@@ -35,24 +34,22 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    async function Pagination() {
-      setCripto([]);
+    async function fetchFavorites() {
       try {
-        const { data } = await api.get<AxiosResponseCoins>(
-          `/coin/filter/front`,
-          {
-            params: {
-              start: page - 1,
-            },
-          }
-        );
+        const response = await api.get<CriptoResponse[]>(`/favorites`, {
+          params: {
+            start: page - 1,
+          },
+        });
 
-        setCripto(data.filter);
+        // Assuming the response is directly an array of CriptoResponse
+        setCripto(response.data || []);
       } catch (e: any) {
         console.log(e.message);
       }
     }
-    Pagination();
+
+    fetchFavorites();
   }, [page]);
 
   return (
@@ -75,7 +72,7 @@ export default function Home() {
 
       <Table variant="simple" size="sm">
         <TableComponentHeader />
-        <TableComponentBody cripto={cripto} />
+        <TableComponentBody cripto={cripto} favoriteCoins={favoriteCoins} /> {/* Pass favorite coins here */}
       </Table>
     </Flex>
   );
