@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Flex, Table, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router"; // Import useRouter
-import { AxiosResponseCoins, CriptoResponse } from "../type/cripto";
+import { useRouter } from "next/router"; 
+import { AxiosResponseCoins, CriptoResponse, FavoriteCoin } from "../type/cripto"; // Ensure FavoriteCoin is imported
 import { TableComponentBody } from "../components/TableComponentBody";
 import { TableComponentHeader } from "../components/TableComponentHeader/TableComponentHeader";
 import { Header } from "../components/Header";
@@ -11,19 +10,19 @@ import { SEO } from "../SEO/index";
 
 export default function Home() {
   const [cripto, setCripto] = useState<CriptoResponse[]>([]);
+  const [favoriteCoins, setFavoriteCoins] = useState<FavoriteCoin[]>([]); // Use the FavoriteCoin type
   const [page, setPage] = useState(1);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter(); 
 
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const { data } = await api.get("/auth/profile"); // Adjust the endpoint if necessary
-        setUser(data); // Assuming the API returns { name: string, email: string }
+        const { data } = await api.get("/auth/profile");
+        setUser(data);
       } catch (e: any) {
-        // Check if the error indicates that the user is not authenticated
         if (e.response && e.response.status === 401) {
-          router.push("/login"); // Redirect to login page
+          router.push("/login");
         } else {
           console.log(e.message);
         }
@@ -34,8 +33,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    async function Pagination() {
-      setCripto([]);
+    async function fetchFavorites() {
       try {
         const response = await api.get<AxiosResponseCoins>(`/favorites`, {
           params: {
@@ -43,17 +41,14 @@ export default function Home() {
           },
         });
 
-        // Check the structure of the response
-        const data = response.data; // Store the response data
-        console.log(data); // Log to see the structure
-
-        // Assuming the response directly contains the array of cryptocurrencies
-        setCripto(data.filter); // Adjust this based on your API's actual response structure
+        console.log(response.data);
+        setCripto(response.data.filter || []);
       } catch (e: any) {
         console.log(e.message);
       }
     }
-    Pagination();
+
+    fetchFavorites();
   }, [page]);
 
   return (
@@ -76,7 +71,7 @@ export default function Home() {
 
       <Table variant="simple" size="sm">
         <TableComponentHeader />
-        <TableComponentBody cripto={cripto} />
+        <TableComponentBody cripto={cripto} favoriteCoins={favoriteCoins} /> {/* Pass favorite coins here */}
       </Table>
     </Flex>
   );

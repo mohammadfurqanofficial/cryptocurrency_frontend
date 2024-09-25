@@ -32,3 +32,7 @@ export interface History {
   volume_24h: number; // Fix typo: "valume" to "volume"
   volume_change_24h: number;
 }
+
+export interface FavoriteCoin {
+  id_coin: string; // or number, depending on your actual data type
+}

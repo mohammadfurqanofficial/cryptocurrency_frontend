@@ -14,7 +14,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { AiFillStar } from "react-icons/ai";
 import { start } from "repl";
 import { api } from "../../services/apiClient";
-import { CriptoResponse } from "../../type/cripto";
+import { CriptoResponse, FavoriteCoin } from "../../type/cripto";
 import { formatDate, formatNumber } from "../../utils/formatAll";
 import { TdComponent } from "./TdComponent";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
@@ -22,11 +22,18 @@ import AlertPopup from "../Header/alertPopup";
 
 interface TableBodyProps {
   cripto: CriptoResponse[];
+  favoriteCoins: FavoriteCoin[]; // Ensure FavoriteCoin is defined elsewhere if needed
   isFavorite?: boolean;
 }
 
+// interface TableBodyProps {
+//   cripto: CriptoResponse[];
+//   isFavorite?: boolean;
+// }
+
 function TableComponentBodyComponent({
   cripto,
+  favoriteCoins,
   isFavorite = false,
 }: TableBodyProps) {
   const [favoriteStar, setFavoriteStar] = useState<string[]>([]);
