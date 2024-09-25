@@ -98,18 +98,7 @@ export function Header({ page, setPage }: HeaderProps) {
         justify="end"
         mr="20px"
         align="center"
-      > 
-        <Link passHref href="/favorite">
-          <Icon
-            as={BsHeartFill}
-            cursor="pointer"
-            fontSize="25px"
-            mt="10px"
-            mr="30px"
-            _hover={{ opacity: "0.8" }}
-            _active={{ opacity: "1" }}
-          />
-        </Link>
+      >
         {download && (
           <CSVLink
             {...dataCSV}
