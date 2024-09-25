@@ -5,7 +5,6 @@ import { useRouter } from "next/router"; // Import useRouter
 import { AxiosResponseCoins, CriptoResponse } from "../type/cripto";
 import { TableComponentBody } from "../components/TableComponentBody";
 import { TableComponentHeader } from "../components/TableComponentHeader/TableComponentHeader";
-import { Progress } from "../components/Progress";
 import { Header } from "../components/Header";
 import { api } from "../services/apiClient";
 import { SEO } from "../SEO/index";
@@ -38,16 +37,18 @@ export default function Home() {
     async function Pagination() {
       setCripto([]);
       try {
-        const { data } = await api.get<AxiosResponseCoins>(
-          `/favorites`,
-          {
-            params: {
-              start: page - 1,
-            },
-          }
-        );
+        const response = await api.get<AxiosResponseCoins>(`/favorites`, {
+          params: {
+            start: page - 1,
+          },
+        });
 
-        setCripto(data.filter);
+        // Check the structure of the response
+        const data = response.data; // Store the response data
+        console.log(data); // Log to see the structure
+
+        // Assuming the response directly contains the array of cryptocurrencies
+        setCripto(data.filter); // Adjust this based on your API's actual response structure
       } catch (e: any) {
         console.log(e.message);
       }
