@@ -40,16 +40,25 @@ export default function Home() {
             start: page - 1,
           },
         });
-
-        console.log(response.data);
-        setCripto(response.data.filter || []);
+  
+        // Log the whole response to understand its structure
+        console.log("Response data:", response.data); 
+  
+        // Check if the response has a valid structure before accessing filter
+        if (response.data && Array.isArray(response.data.filter)) {
+          setCripto(response.data.filter);
+        } else {
+          console.warn("Expected 'filter' to be an array but got:", response.data.filter);
+          setCripto([]); // Set to an empty array if filter is not available
+        }
       } catch (e: any) {
-        console.log(e.message);
+        console.log("Error fetching favorites:", e.message);
       }
     }
-
+  
     fetchFavorites();
   }, [page]);
+  
 
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
