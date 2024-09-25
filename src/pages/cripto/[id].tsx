@@ -53,6 +53,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookie = parseCookies(ctx);
   const api = apiServices(ctx);
 
+  // if (!cookie["cripto.auth"]) {
+  //   return {
+  //     redirect: {
+  //       destination: "/",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
+
   try {
     const { data } = await api.get(
       `${process.env.NEXT_PUBLIC_URL_BACKEND}/coin/take/${id}`,
