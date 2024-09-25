@@ -33,6 +33,6 @@ export interface History {
   volume_change_24h: number;
 }
 
-export interface FavoriteCoin {
-  id_coin: string; // or number, depending on your actual data type
-}
+// export interface FavoriteCoin {
+//   id_coin: string; // or number, depending on your actual data type
+// }
