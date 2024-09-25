@@ -162,7 +162,7 @@ export default function AllCoins() {
               <td>{coin.symbol}</td>
               <td>{new Date(coin.last_historical_data).toLocaleString()}</td>
               <td>
-              <Button
+                <Button
                   size="sm"
                   onClick={() => toggleFavorite(coin.id, coin.name, coin.symbol, coin.rank)}
                 >
