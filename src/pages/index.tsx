@@ -10,24 +10,26 @@ import { Header } from "../components/Header";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
 import AlertPopup from "../components/Header/alertPopup";
 
+interface CoinHistory {
+  price: number;
+  volume_24h: number;
+  percent_change_1h: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
+  percent_change_30d: number;
+  percent_change_60d: number;
+  percent_change_90d: number;
+  market_cap: number;
+  fully_diluted_market_cap: number;
+  lastUpdated: string; // If you need it
+}
+
 interface FavoriteCoin {
   coinId: number;
   name: string;
   symbol: string;
   rank: number;
-  coinHistoryId: {
-    price: number;
-    volume_24h: number;
-    percent_change_1h: number;
-    percent_change_24h: number;
-    percent_change_7d: number;
-    percent_change_30d: number;
-    percent_change_60d: number;
-    percent_change_90d: number;
-    market_cap: number;
-    fully_diluted_market_cap: number;
-    // lastUpdated: string;
-  };
+  coinHistoryId: CoinHistory[]; // Indicate that this is an array
 }
 
 export default function FavoriteCoins() {
@@ -109,28 +111,30 @@ export default function FavoriteCoins() {
         </thead>
         <tbody style={{ textAlign: "center" }}>
           {favorites.map((coin) => {
-            console.log("Coin Data:", coin); // Log each coin's data
+            // console.log("Coin Data:", coin); // Log each coin's data
+            const coinHistory = coin.coinHistoryId[0]; // Access the first element of the array
+            console.log("Coin Data History:", coinHistory); // Log each coin's data
+            
             return (
               <tr key={coin.coinId} style={{ height: "50px" }}>
                 <td>{coin.coinId}</td>
                 <td>{coin.rank}</td>
                 <td>{coin.name}</td>
                 <td>{coin.symbol}</td>
-                <td>${coin.coinHistoryId?.price !== undefined ? coin.coinHistoryId.price.toFixed(2) : "N/A"}</td>
-                <td>${coin.coinHistoryId?.volume_24h !== undefined ? coin.coinHistoryId.volume_24h.toLocaleString() : "N/A"}</td>
-                <td>{coin.coinHistoryId?.percent_change_1h !== undefined ? coin.coinHistoryId.percent_change_1h.toFixed(2) + "%" : "N/A"}</td>
-                <td>{coin.coinHistoryId?.percent_change_24h !== undefined ? coin.coinHistoryId.percent_change_24h.toFixed(2) + "%" : "N/A"}</td>
-                <td>{coin.coinHistoryId?.percent_change_7d !== undefined ? coin.coinHistoryId.percent_change_7d.toFixed(2) + "%" : "N/A"}</td>
-                <td>{coin.coinHistoryId?.percent_change_30d !== undefined ? coin.coinHistoryId.percent_change_30d.toFixed(2) + "%" : "N/A"}</td>
-                <td>{coin.coinHistoryId?.percent_change_60d !== undefined ? coin.coinHistoryId.percent_change_60d.toFixed(2) + "%" : "N/A"}</td>
-                <td>{coin.coinHistoryId?.percent_change_90d !== undefined ? coin.coinHistoryId.percent_change_90d.toFixed(2) + "%" : "N/A"}</td>
-                <td>${coin.coinHistoryId?.market_cap !== undefined ? coin.coinHistoryId.market_cap.toLocaleString() : "N/A"}</td>
-                <td>${coin.coinHistoryId?.fully_diluted_market_cap !== undefined ? coin.coinHistoryId.fully_diluted_market_cap.toLocaleString() : "N/A"}</td>
+                <td>${coinHistory?.price !== undefined ? coinHistory.price.toFixed(2) : "N/A"}</td>
+                <td>${coinHistory?.volume_24h !== undefined ? coinHistory.volume_24h.toLocaleString() : "N/A"}</td>
+                <td>{coinHistory?.percent_change_1h !== undefined ? coinHistory.percent_change_1h.toFixed(2) + "%" : "N/A"}</td>
+                <td>{coinHistory?.percent_change_24h !== undefined ? coinHistory.percent_change_24h.toFixed(2) + "%" : "N/A"}</td>
+                <td>{coinHistory?.percent_change_7d !== undefined ? coinHistory.percent_change_7d.toFixed(2) + "%" : "N/A"}</td>
+                <td>{coinHistory?.percent_change_30d !== undefined ? coinHistory.percent_change_30d.toFixed(2) + "%" : "N/A"}</td>
+                <td>{coinHistory?.percent_change_60d !== undefined ? coinHistory.percent_change_60d.toFixed(2) + "%" : "N/A"}</td>
+                <td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(2) + "%" : "N/A"}</td>
+                <td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</td>
+                <td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</td>
               </tr>
             );
           })}
         </tbody>
-
       </Table>
     </Flex>
   );
