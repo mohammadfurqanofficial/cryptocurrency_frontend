@@ -101,7 +101,7 @@ export default function FavoriteCoins() {
             <th>Change (90d)</th>
             <th>Market Cap</th>
             <th>Market Cap Dominance</th>
-            <th>Last Updated</th>
+            {/* <th>Last Updated</th> */}
           </tr>
         </thead>
         <tbody style={{ textAlign: "center" }}>
@@ -121,7 +121,7 @@ export default function FavoriteCoins() {
               <td>{coin.coinHistoryId.percent_change_90d.toFixed(2)}%</td>
               <td>${coin.coinHistoryId.market_cap.toLocaleString()}</td>
               <td>${coin.coinHistoryId.fully_diluted_market_cap.toLocaleString()}</td>
-              <td>{new Date(coin.coinHistoryId.lastUpdated).toLocaleString()}</td>
+              {/* <td>{new Date(coin.coinHistoryId.lastUpdated).toLocaleString()}</td> */}
               <div><Icon
                     as={BsFillExclamationCircleFill}
                     cursor="pointer"
