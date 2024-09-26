@@ -113,7 +113,7 @@ export default function FavoriteCoins() {
           {favorites.map((coin) => {
             // console.log("Coin Data:", coin); // Log each coin's data
             const coinHistory = coin.coinHistoryId[0]; // Access the first element of the array
-            console.log("Coin Data History:", coinHistory); // Log each coin's data
+            // console.log("Coin Data History:", coinHistory); // Log each coin's data
             
             return (
               <tr key={coin.coinId} style={{ height: "50px" }}>
