@@ -111,17 +111,17 @@ export default function FavoriteCoins() {
               <td>{coin.rank}</td>
               <td>{coin.name}</td>
               <td>{coin.symbol}</td>
-              <td>${coin.coinHistoryId?.price?.toFixed(2) || "N/A"}</td>
-              <td>${coin.coinHistoryId?.volume_24h?.toLocaleString() || "N/A"}</td>
-              <td>{coin.coinHistoryId?.percent_change_1h?.toFixed(2) + "%" || "N/A"}</td>
-              <td>{coin.coinHistoryId?.percent_change_24h?.toFixed(2) + "%" || "N/A"}</td>
-              <td>{coin.coinHistoryId?.percent_change_7d?.toFixed(2) + "%" || "N/A"}</td>
-              <td>{coin.coinHistoryId?.percent_change_30d?.toFixed(2) + "%" || "N/A"}</td>
-              <td>{coin.coinHistoryId?.percent_change_60d?.toFixed(2) + "%" || "N/A"}</td>
-              <td>{coin.coinHistoryId?.percent_change_90d?.toFixed(2) + "%" || "N/A"}</td>
-              <td>${coin.coinHistoryId?.market_cap?.toLocaleString() || "N/A"}</td>
-              <td>${coin.coinHistoryId?.fully_diluted_market_cap?.toLocaleString() || "N/A"}</td>
-              <div><Icon
+              <td>${coin.coinHistoryId?.price !== undefined ? coin.coinHistoryId.price.toFixed(2) : "N/A"}</td>
+              <td>${coin.coinHistoryId?.volume_24h !== undefined ? coin.coinHistoryId.volume_24h.toLocaleString() : "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_1h !== undefined ? coin.coinHistoryId.percent_change_1h.toFixed(2) + "%" : "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_24h !== undefined ? coin.coinHistoryId.percent_change_24h.toFixed(2) + "%" : "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_7d !== undefined ? coin.coinHistoryId.percent_change_7d.toFixed(2) + "%" : "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_30d !== undefined ? coin.coinHistoryId.percent_change_30d.toFixed(2) + "%" : "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_60d !== undefined ? coin.coinHistoryId.percent_change_60d.toFixed(2) + "%" : "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_90d !== undefined ? coin.coinHistoryId.percent_change_90d.toFixed(2) + "%" : "N/A"}</td>
+              <td>${coin.coinHistoryId?.market_cap !== undefined ? coin.coinHistoryId.market_cap.toLocaleString() : "N/A"}</td>
+              <td>${coin.coinHistoryId?.fully_diluted_market_cap !== undefined ? coin.coinHistoryId.fully_diluted_market_cap.toLocaleString() : "N/A"}</td>
+            <div><Icon
                     as={BsFillExclamationCircleFill}
                     cursor="pointer"
                     fontSize="25px"
