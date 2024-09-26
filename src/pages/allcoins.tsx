@@ -162,7 +162,7 @@ export default function AllCoins() {
         </thead>
         <tbody style={{ textAlign: "center" }}>
           {coins.map((coin) => (
-            <tr key={coin.id}>
+            <tr key={coin.id} style={{ height: "50px" }}>
               <td>{coin.id}</td>
               <td>{coin.rank}</td>
               <td>{coin.name}</td>
