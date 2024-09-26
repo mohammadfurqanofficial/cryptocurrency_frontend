@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex, Table, Text, Button } from "@chakra-ui/react";
+import { Flex, Table, Text, Button, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { api } from "../services/apiClient";
@@ -7,6 +7,8 @@ import { parseCookies } from "nookies";
 import toast from "react-hot-toast";
 import { SEO } from "../SEO/index";
 import { Header } from "../components/Header";
+import { BsFillExclamationCircleFill } from "react-icons/bs";
+import AlertPopup from "../components/Header/alertPopup";
 
 interface FavoriteCoin {
   coinId: number;
@@ -120,6 +122,18 @@ export default function FavoriteCoins() {
               <td>${coin.coinHistoryId.market_cap.toLocaleString()}</td>
               <td>${coin.coinHistoryId.fully_diluted_market_cap.toLocaleString()}</td>
               <td>{new Date(coin.coinHistoryId.lastUpdated).toLocaleString()}</td>
+              <div><Icon
+                    as={BsFillExclamationCircleFill}
+                    cursor="pointer"
+                    fontSize="25px"
+                    mt="10px"
+                    mr="30px"
+                    _hover={{ opacity: "0.8" }}
+                    _active={{ opacity: "1" }}
+                    // onClick={onOpen}
+                />
+                {/* <AlertPopup element={element} isOpen={isOpen} onClose={onClose} /> */}
+                </div>
             </tr>
           ))}
         </tbody>
