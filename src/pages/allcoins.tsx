@@ -6,6 +6,8 @@ import { api } from "../services/apiClient";
 import { parseCookies } from "nookies"; // If you're using cookies for authentication
 import toast from "react-hot-toast";
 import { SEO } from "../SEO/index";
+import { Progress } from "../components/Progress";
+import { Header } from "../components/Header";
 
 interface CoinData {
   id: number;
@@ -18,6 +20,7 @@ interface CoinData {
 
 export default function AllCoins() {
   const [coins, setCoins] = useState<CoinData[]>([]);
+  const [page, setPage] = useState(1);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]); // State to track favorite coins
   const router = useRouter();
@@ -129,6 +132,8 @@ export default function AllCoins() {
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
       <SEO />
+      <Header page={page} setPage={setPage} />
+
       {user && (
         <Flex
           p={4}
