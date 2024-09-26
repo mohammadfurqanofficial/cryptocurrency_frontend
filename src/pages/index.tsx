@@ -26,7 +26,7 @@ interface FavoriteCoin {
     percent_change_90d: number;
     market_cap: number;
     fully_diluted_market_cap: number;
-    lastUpdated: string;
+    // lastUpdated: string;
   };
 }
 
