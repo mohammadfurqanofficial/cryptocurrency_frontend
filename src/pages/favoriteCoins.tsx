@@ -19,7 +19,11 @@ interface FavoriteCoin {
     percent_change_1h: number;
     percent_change_24h: number;
     percent_change_7d: number;
+    percent_change_30d: number;
+    percent_change_60d: number;
+    percent_change_90d: number;
     market_cap: number;
+    fully_diluted_market_cap: number;
     lastUpdated: string;
   };
 }
@@ -86,9 +90,15 @@ export default function FavoriteCoins() {
             <th>Name</th>
             <th>Symbol</th>
             <th>Price</th>
-            <th>Market Cap</th>
             <th>Volume (24h)</th>
-            <th>Change (24h)</th>
+            <th>Change (1hr)</th>
+            <th>Change (24hr)</th>
+            <th>Change (7d)</th>
+            <th>Change (30d)</th>
+            <th>Change (60d)</th>
+            <th>Change (90d)</th>
+            <th>Market Cap</th>
+            <th>Market Cap Dominance</th>
             <th>Last Updated</th>
           </tr>
         </thead>
@@ -100,9 +110,15 @@ export default function FavoriteCoins() {
               <td>{coin.name}</td>
               <td>{coin.symbol}</td>
               <td>${coin.coinHistoryId.price.toFixed(2)}</td>
-              <td>${coin.coinHistoryId.market_cap.toLocaleString()}</td>
               <td>${coin.coinHistoryId.volume_24h.toLocaleString()}</td>
+              <td>{coin.coinHistoryId.percent_change_1h.toFixed(2)}%</td>
               <td>{coin.coinHistoryId.percent_change_24h.toFixed(2)}%</td>
+              <td>{coin.coinHistoryId.percent_change_7d.toFixed(2)}%</td>
+              <td>{coin.coinHistoryId.percent_change_30d.toFixed(2)}%</td>
+              <td>{coin.coinHistoryId.percent_change_60d.toFixed(2)}%</td>
+              <td>{coin.coinHistoryId.percent_change_90d.toFixed(2)}%</td>
+              <td>${coin.coinHistoryId.market_cap.toLocaleString()}</td>
+              <td>${coin.coinHistoryId.fully_diluted_market_cap.toLocaleString()}</td>
               <td>{new Date(coin.coinHistoryId.lastUpdated).toLocaleString()}</td>
             </tr>
           ))}
