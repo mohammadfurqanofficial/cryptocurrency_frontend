@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { SEO } from "../SEO/index";
 import { Progress } from "../components/Progress";
 import { Header } from "../components/Header";
-import { TableComponentHeader } from "../components/TableComponentHeader/TableComponentHeader";
+// import { TableComponentHeader } from "../components/TableComponentHeader/TableComponentHeader";
 
 interface CoinData {
   id: number;
@@ -149,7 +149,7 @@ export default function AllCoins() {
       )}
 
       <Table variant="simple" size="sm">
-      <TableComponentHeader />
+      {/* <TableComponentHeader /> */}
         <thead>
           <tr>
             <th>ID</th>
