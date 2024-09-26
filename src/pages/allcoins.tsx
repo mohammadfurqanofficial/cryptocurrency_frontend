@@ -6,9 +6,7 @@ import { api } from "../services/apiClient";
 import { parseCookies } from "nookies"; // If you're using cookies for authentication
 import toast from "react-hot-toast";
 import { SEO } from "../SEO/index";
-import { Progress } from "../components/Progress";
 import { Header } from "../components/Header";
-// import { TableComponentHeader } from "../components/TableComponentHeader/TableComponentHeader";
 
 interface CoinData {
   id: number;
@@ -64,6 +62,16 @@ export default function AllCoins() {
     fetchAllCoins();
   }, []);
 
+  // Function to save coin history
+  const saveCoinHistory = async (coinId: number) => {
+    try {
+      const response = await api.post("/coins/save-history", { coinId });
+      toast.success("Coin history saved successfully."); // Show success message
+    } catch (error) {
+      toast.error("Failed to save coin history."); // Show error message
+    }
+  };
+
   // Function to handle adding a coin to favorites
   const handleAddToFavorites = async (coinId: number, name: string, symbol: string, rank: number) => {
     try {
@@ -84,6 +92,9 @@ export default function AllCoins() {
           },
         }
       );
+
+      // Save coin history when the coin is successfully added to favorites
+      await saveCoinHistory(coinId);
   
       toast.success(response.data.message); // Show success message
       setFavorites((prev) => [...prev, coinId]); // Update favorites state
@@ -149,7 +160,6 @@ export default function AllCoins() {
       )}
 
       <Table variant="simple" size="sm">
-      {/* <TableComponentHeader /> */}
         <thead>
           <tr>
             <th>ID</th>
