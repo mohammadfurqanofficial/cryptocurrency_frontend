@@ -20,9 +20,9 @@ interface CoinData {
 
 export default function AllCoins() {
   const [coins, setCoins] = useState<CoinData[]>([]);
-  const [page, setPage] = useState(1);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]); // State to track favorite coins
+  const [page, setPage] = useState(1); // Add page state management
   const router = useRouter();
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export default function AllCoins() {
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
       <SEO />
-      <Header page={page} setPage={setPage} />
+      <Header page={page} setPage={setPage} /> {/* Pass page and setPage here */}
 
       {user && (
         <Flex
