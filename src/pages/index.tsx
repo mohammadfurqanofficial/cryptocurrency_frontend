@@ -15,18 +15,18 @@ interface FavoriteCoin {
   name: string;
   symbol: string;
   rank: number;
-  coinHistoryId: {
-    price: number;
-    volume_24h: number;
-    percent_change_1h: number;
-    percent_change_24h: number;
-    percent_change_7d: number;
-    percent_change_30d: number;
-    percent_change_60d: number;
-    percent_change_90d: number;
-    market_cap: number;
-    fully_diluted_market_cap: number;
-    lastUpdated: string;
+  coinHistoryId?: {
+    price?: number;
+    volume_24h?: number;
+    percent_change_1h?: number;
+    percent_change_24h?: number;
+    percent_change_7d?: number;
+    percent_change_30d?: number;
+    percent_change_60d?: number;
+    percent_change_90d?: number;
+    market_cap?: number;
+    fully_diluted_market_cap?: number;
+    lastUpdated?: string;
   };
 }
 
@@ -102,7 +102,6 @@ export default function FavoriteCoins() {
             <th>Market Cap</th>
             <th>Market Cap Dominance</th>
             <th>Alert</th>
-            {/* <th>Last Updated</th> */}
           </tr>
         </thead>
         <tbody style={{ textAlign: "center" }}>
@@ -112,17 +111,16 @@ export default function FavoriteCoins() {
               <td>{coin.rank}</td>
               <td>{coin.name}</td>
               <td>{coin.symbol}</td>
-              <td>${coin.coinHistoryId.price.toFixed(2)}</td>
-              <td>${coin.coinHistoryId.volume_24h.toLocaleString()}</td>
-              <td>{coin.coinHistoryId.percent_change_1h.toFixed(2)}%</td>
-              <td>{coin.coinHistoryId.percent_change_24h.toFixed(2)}%</td>
-              <td>{coin.coinHistoryId.percent_change_7d.toFixed(2)}%</td>
-              <td>{coin.coinHistoryId.percent_change_30d.toFixed(2)}%</td>
-              <td>{coin.coinHistoryId.percent_change_60d.toFixed(2)}%</td>
-              <td>{coin.coinHistoryId.percent_change_90d.toFixed(2)}%</td>
-              <td>${coin.coinHistoryId.market_cap.toLocaleString()}</td>
-              <td>${coin.coinHistoryId.fully_diluted_market_cap.toLocaleString()}</td>
-              {/* <td>{new Date(coin.coinHistoryId.lastUpdated).toLocaleString()}</td> */}
+              <td>${coin.coinHistoryId?.price?.toFixed(2) || "N/A"}</td>
+              <td>${coin.coinHistoryId?.volume_24h?.toLocaleString() || "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_1h?.toFixed(2) + "%" || "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_24h?.toFixed(2) + "%" || "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_7d?.toFixed(2) + "%" || "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_30d?.toFixed(2) + "%" || "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_60d?.toFixed(2) + "%" || "N/A"}</td>
+              <td>{coin.coinHistoryId?.percent_change_90d?.toFixed(2) + "%" || "N/A"}</td>
+              <td>${coin.coinHistoryId?.market_cap?.toLocaleString() || "N/A"}</td>
+              <td>${coin.coinHistoryId?.fully_diluted_market_cap?.toLocaleString() || "N/A"}</td>
               <div><Icon
                     as={BsFillExclamationCircleFill}
                     cursor="pointer"
@@ -131,7 +129,6 @@ export default function FavoriteCoins() {
                     mr="30px"
                     _hover={{ opacity: "0.8" }}
                     _active={{ opacity: "1" }}
-                    // onClick={onOpen}
                 />
                 {/* <AlertPopup element={element} isOpen={isOpen} onClose={onClose} /> */}
                 </div>
