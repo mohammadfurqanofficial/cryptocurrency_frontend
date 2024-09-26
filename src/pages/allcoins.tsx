@@ -143,7 +143,7 @@ export default function AllCoins() {
           mb={4}
           justify="space-between"
         >
-          <Text fontSize="lg">{user.name}</Text>
+          <Text fontSize="lg" color="gray.600">{user.name}</Text>
           <Text fontSize="md" color="gray.600">{user.email}</Text>
         </Flex>
       )}
