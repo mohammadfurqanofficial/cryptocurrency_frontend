@@ -160,7 +160,7 @@ export default function AllCoins() {
             <th>Favorite</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style={{ textAlign: "center" }}>
           {coins.map((coin) => (
             <tr key={coin.id}>
               <td>{coin.id}</td>
