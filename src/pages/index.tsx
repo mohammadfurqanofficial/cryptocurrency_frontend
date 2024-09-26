@@ -101,6 +101,7 @@ export default function FavoriteCoins() {
             <th>Change (90d)</th>
             <th>Market Cap</th>
             <th>Market Cap Dominance</th>
+            <th>Alert</th>
             {/* <th>Last Updated</th> */}
           </tr>
         </thead>
