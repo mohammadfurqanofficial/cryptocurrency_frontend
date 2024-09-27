@@ -9,6 +9,7 @@ import { SEO } from "../SEO/index";
 import { Header } from "../components/Header";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
 import AlertPopup from "../components/Header/alertPopup";
+import Link from 'next/link'; // Import Link from Next.js
 
 interface CoinHistory {
   price: number;
@@ -119,7 +120,13 @@ export default function FavoriteCoins() {
               <tr key={coin.coinId} style={{ height: "50px" }}>
                 <td>{coin.coinId}</td>
                 <td>{coin.rank}</td>
-                <td>{coin.name}</td>
+                <td>
+                  <Link href={`/coin/${coin.coinId}`} passHref>
+                    <Button size="sm" variant="link">
+                      {coin.name}
+                    </Button>
+                  </Link>
+                </td>
                 <td>{coin.symbol}</td>
                 <td>${coinHistory?.price !== undefined ? coinHistory.price.toFixed(3) : "N/A"}</td>
                 <td>${coinHistory?.volume_24h !== undefined ? coinHistory.volume_24h.toLocaleString() : "N/A"}</td>
