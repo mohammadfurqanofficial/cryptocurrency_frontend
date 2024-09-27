@@ -31,6 +31,7 @@ const CoinDetails = () => {
       const fetchCoinHistory = async () => {
         try {
           const { data } = await api.get(`/api/coins/coin-history/${id}`);
+          console.log(data);
           setCoinData(data); // Assuming the API returns the coin's history data
           setLoading(false);
         } catch (error: any) {
