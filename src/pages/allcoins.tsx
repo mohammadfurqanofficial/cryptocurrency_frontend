@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex, Table, Text, Button } from "@chakra-ui/react";
+import { Flex, Table, Text, Button, Thead, Tbody, Tr, Th, Td  } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { api } from "../services/apiClient";
@@ -160,35 +160,35 @@ export default function AllCoins() {
       )}
 
       <Table variant="simple" size="sm">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Symbol</th>
-            <th>Last Update</th>
-            <th>Favorite</th>
-          </tr>
-        </thead>
-        <tbody style={{ textAlign: "center" }}>
+        <Thead>
+          <Tr>
+            <Th>ID</Th>
+            <Th>Rank</Th>
+            <Th>Name</Th>
+            <Th>Symbol</Th>
+            <Th>Last Update</Th>
+            <Th>Favorite</Th>
+          </Tr>
+        </Thead>
+        <Tbody style={{ textAlign: "center" }}>
           {coins.map((coin) => (
-            <tr key={coin.id} style={{ height: "50px" }}>
-              <td>{coin.id}</td>
-              <td>{coin.rank}</td>
-              <td>{coin.name}</td>
-              <td>{coin.symbol}</td>
-              <td>{new Date(coin.last_historical_data).toLocaleString()}</td>
-              <td>
+            <Tr key={coin.id} style={{ height: "50px" }}>
+              <Td>{coin.id}</Td>
+              <Td>{coin.rank}</Td>
+              <Td>{coin.name}</Td>
+              <Td>{coin.symbol}</Td>
+              <Td>{new Date(coin.last_historical_data).toLocaleString()}</Td>
+              <Td>
                 <Button
                   size="sm"
                   onClick={() => toggleFavorite(coin.id, coin.name, coin.symbol, coin.rank)}
                 >
                   {favorites.includes(coin.id) ? "Remove from Favorite" : "Add to Favorite"}
                 </Button>
-              </td>
-            </tr>
+              </Td>
+            </Tr>
           ))}
-        </tbody>
+        </Tbody>
       </Table>
     </Flex>
   );
