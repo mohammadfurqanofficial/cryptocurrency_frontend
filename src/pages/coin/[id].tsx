@@ -62,7 +62,7 @@ const CoinDetails = () => {
   if (!coinData) {
     return <p>No data found for this coin.</p>;
   }
-  // ${coinData.name}
+
   // Render coin details using coinData
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
@@ -72,24 +72,24 @@ const CoinDetails = () => {
         {coinData.name} ({coinData.symbol}) - Coin Details
       </Text>
       <Table variant="simple" size="sm">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Volume (24h)</th>
-            <th>Change (1hr)</th>
-            <th>Change (24hr)</th>
-            <th>Change (7d)</th>
-            <th>Change (30d)</th>
-            <th>Change (60d)</th>
-            <th>Change (90d)</th>
-            <th>Market Cap</th>
-            <th>Market Cap Dominance</th>
-          </tr>
-        </thead>
-        <tbody>
+        <Thead>
+          <Tr>
+            <Th>ID</Th>
+            <Th>Rank</Th>
+            <Th>Name</Th>
+            <Th>Price</Th>
+            <Th>Volume (24h)</Th>
+            <Th>Change (1hr)</Th>
+            <Th>Change (24hr)</Th>
+            <Th>Change (7d)</Th>
+            <Th>Change (30d)</Th>
+            <Th>Change (60d)</Th>
+            <Th>Change (90d)</Th>
+            <Th>Market Cap</Th>
+            <Th>Market Cap Dominance</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
           {coinData.coinHistory.map((history) => (
             <Tr key={history._id}>
               <Td>${history?.price !== undefined ? history.price.toFixed(3) : "N/A"}</Td>
@@ -104,7 +104,7 @@ const CoinDetails = () => {
               <Td>${history?.fully_diluted_market_cap !== undefined ? history.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
             </Tr>
           ))}
-        </tbody>
+        </Tbody>
       </Table>
     </Flex>
   );
