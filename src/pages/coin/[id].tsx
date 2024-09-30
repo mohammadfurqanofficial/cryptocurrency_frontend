@@ -74,9 +74,6 @@ const CoinDetails = () => {
       <Table variant="simple" size="sm">
         <Thead>
           <Tr>
-            <Th>ID</Th>
-            <Th>Rank</Th>
-            <Th>Name</Th>
             <Th>Price</Th>
             <Th>Volume (24h)</Th>
             <Th>Change (1hr)</Th>
