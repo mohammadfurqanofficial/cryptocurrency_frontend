@@ -59,7 +59,7 @@ export default function FavoriteCoins() {
   useEffect(() => {
     async function fetchFavoriteCoins() {
       try {
-        const { data } = await api.get("/favorites");
+        const { data } = await api.get("/favorites/all-favorites");
         console.log("API Response:", data); // Log the entire response
         setFavorites(data.favorites); // Assuming the API returns the favorites in this structure
       } catch (e: any) {
