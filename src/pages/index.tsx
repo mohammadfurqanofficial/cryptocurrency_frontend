@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex, Table, Text, Button, Icon } from "@chakra-ui/react";
+import { Flex, Table, Text, Button, Icon, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { api } from "../services/apiClient";
@@ -90,58 +90,58 @@ export default function FavoriteCoins() {
       )}
 
       <Table variant="simple" size="sm">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Symbol</th>
-            <th>Price</th>
-            <th>Volume (24h)</th>
-            <th>Change (1hr)</th>
-            <th>Change (24hr)</th>
-            <th>Change (7d)</th>
-            <th>Change (30d)</th>
-            <th>Change (60d)</th>
-            <th>Change (90d)</th>
-            <th>Market Cap</th>
-            <th>Market Cap Dominance</th>
-            <th>Alert</th>
+        <Thead>
+          <Tr>
+            <Th>ID</Th>
+            <Th>Rank</Th>
+            <Th>Name</Th>
+            <Th>Symbol</Th>
+            <Th>Price</Th>
+            <Th>Volume (24h)</Th>
+            <Th>Change (1hr)</Th>
+            <Th>Change (24hr)</Th>
+            <Th>Change (7d)</Th>
+            <Th>Change (30d)</Th>
+            <Th>Change (60d)</Th>
+            <Th>Change (90d)</Th>
+            <Th>Market Cap</Th>
+            <Th>Market Cap Dominance</Th>
+            <Th>Alert</Th>
             {/* <th>Last Updated</th> */}
-          </tr>
-        </thead>
-        <tbody style={{ textAlign: "center" }}>
+          </Tr>
+        </Thead>
+        <Tbody style={{ textAlign: "center" }}>
           {favorites.map((coin) => {
             // console.log("Coin Data:", coin); // Log each coin's data
             const coinHistory = coin.coinHistoryId[0]; // Access the first element of the array
             // console.log("Coin Data History:", coinHistory); // Log each coin's data
             
             return (
-              <tr key={coin.coinId} style={{ height: "50px" }}>
-                <td>{coin.coinId}</td>
-                <td>{coin.rank}</td>
-                <td>
+              <Tr key={coin.coinId} style={{ height: "50px" }}>
+                <Td>{coin.coinId}</Td>
+                <Td>{coin.rank}</Td>
+                <Td>
                   <Link href={`/coin/${coin.coinId}`} passHref>
                     <Button size="sm" variant="link">
                       {coin.name}
                     </Button>
                   </Link>
-                </td>
-                <td>{coin.symbol}</td>
-                <td>${coinHistory?.price !== undefined ? coinHistory.price.toFixed(3) : "N/A"}</td>
-                <td>${coinHistory?.volume_24h !== undefined ? coinHistory.volume_24h.toLocaleString() : "N/A"}</td>
-                <td>{coinHistory?.percent_change_1h !== undefined ? coinHistory.percent_change_1h.toFixed(3) + "%" : "N/A"}</td>
-                <td>{coinHistory?.percent_change_24h !== undefined ? coinHistory.percent_change_24h.toFixed(3) + "%" : "N/A"}</td>
-                <td>{coinHistory?.percent_change_7d !== undefined ? coinHistory.percent_change_7d.toFixed(3) + "%" : "N/A"}</td>
-                <td>{coinHistory?.percent_change_30d !== undefined ? coinHistory.percent_change_30d.toFixed(3) + "%" : "N/A"}</td>
-                <td>{coinHistory?.percent_change_60d !== undefined ? coinHistory.percent_change_60d.toFixed(3) + "%" : "N/A"}</td>
-                <td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(3) + "%" : "N/A"}</td>
-                <td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</td>
-                <td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</td>
-              </tr>
+                </Td>
+                <Td>{coin.symbol}</Td>
+                <Td>${coinHistory?.price !== undefined ? coinHistory.price.toFixed(3) : "N/A"}</Td>
+                <Td>${coinHistory?.volume_24h !== undefined ? coinHistory.volume_24h.toLocaleString() : "N/A"}</Td>
+                <Td>{coinHistory?.percent_change_1h !== undefined ? coinHistory.percent_change_1h.toFixed(3) + "%" : "N/A"}</Td>
+                <Td>{coinHistory?.percent_change_24h !== undefined ? coinHistory.percent_change_24h.toFixed(3) + "%" : "N/A"}</Td>
+                <Td>{coinHistory?.percent_change_7d !== undefined ? coinHistory.percent_change_7d.toFixed(3) + "%" : "N/A"}</Td>
+                <Td>{coinHistory?.percent_change_30d !== undefined ? coinHistory.percent_change_30d.toFixed(3) + "%" : "N/A"}</Td>
+                <Td>{coinHistory?.percent_change_60d !== undefined ? coinHistory.percent_change_60d.toFixed(3) + "%" : "N/A"}</Td>
+                <Td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(3) + "%" : "N/A"}</Td>
+                <Td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</Td>
+                <Td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
+              </Tr>
             );
           })}
-        </tbody>
+        </Tbody>
       </Table>
     </Flex>
   );
