@@ -9,6 +9,7 @@ import { SEO } from "../SEO/index";
 import { Header } from "../components/Header";
 
 interface CoinData {
+  coinId: any;
   id: number;
   rank: number;
   name: string;
@@ -41,6 +42,21 @@ export default function AllCoins() {
     fetchProfile();
   }, []);
 
+  
+  useEffect(() => {
+    async function fetchFavorites() {
+      try {
+        const { data } = await api.get("/favorites/all-favorites");
+        setFavorites(data.map((coin: CoinData) => coin.coinId)); // Assuming data contains an array of favorite coin objects
+      } catch (error) {
+        console.error("Failed to fetch favorite coins:", error);
+      }
+    }
+  
+    fetchFavorites();
+  }, []);
+
+
   useEffect(() => {
     async function fetchAllCoins() {
       try {
@@ -71,6 +87,8 @@ export default function AllCoins() {
       toast.error("Failed to save coin history."); // Show error message
     }
   };
+
+  
 
   // Function to handle adding a coin to favorites
   const handleAddToFavorites = async (coinId: number, name: string, symbol: string, rank: number) => {
