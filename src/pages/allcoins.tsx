@@ -132,10 +132,10 @@ export default function AllCoins() {
         return;
       }
   
-      const response = await api.post(
-        "/favorites/remove",
-        { coinId },
+      const response = await api.delete(
+        `/favorites/remove`,
         {
+          data: { coinId },  // Pass the data in the body
           headers: {
             Authorization: `Bearer ${token}`,
           },
