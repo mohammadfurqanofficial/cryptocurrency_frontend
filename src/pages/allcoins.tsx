@@ -42,12 +42,12 @@ export default function AllCoins() {
     fetchProfile();
   }, []);
 
-  
+
   useEffect(() => {
     async function fetchFavorites() {
       try {
         const { data } = await api.get("/favorites/all-favorites");
-        setFavorites(data.map((coin: CoinData) => coin.coinId)); // Assuming data contains an array of favorite coin objects
+        setFavorites(data.favorites.map((coin: CoinData) => coin.coinId)); // Access the 'favorites' key
       } catch (error) {
         console.error("Failed to fetch favorite coins:", error);
       }
@@ -55,6 +55,7 @@ export default function AllCoins() {
   
     fetchFavorites();
   }, []);
+  
 
 
   useEffect(() => {
