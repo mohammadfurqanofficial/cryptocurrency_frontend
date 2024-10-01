@@ -32,3 +32,25 @@ export interface History {
   volume_24h: number; // Fix typo: "valume" to "volume"
   volume_change_24h: number;
 }
+
+interface CoinHistory {
+  price: number;
+  volume_24h: number;
+  percent_change_1h: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
+  percent_change_30d: number;
+  percent_change_60d: number;
+  percent_change_90d: number;
+  market_cap: number;
+  fully_diluted_market_cap: number;
+  lastUpdated: string; // If you need it
+}
+
+interface FavoriteCoin {
+  coinId: number;
+  name: string;
+  symbol: string;
+  rank: number;
+  coinHistoryId: CoinHistory[]; // Indicate that this is an array
+}

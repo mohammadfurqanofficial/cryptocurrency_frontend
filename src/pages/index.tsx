@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex, Table, Text, Button, Icon, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { Flex, Table, Text, Button, Icon, Thead, Tbody, Tr, Th, Td, useColorMode, useDisclosure, Link as LinkChakra } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { api } from "../services/apiClient";
-import { parseCookies } from "nookies";
-import toast from "react-hot-toast";
 import { SEO } from "../SEO/index";
 import { Header } from "../components/Header";
-import { BsFillExclamationCircleFill } from "react-icons/bs";
 import AlertPopup from "../components/Header/alertPopup";
 import Link from 'next/link'; // Import Link from Next.js
+import { AiFillStar } from "react-icons/ai";
+import toast, { Toaster } from "react-hot-toast";
+import { BsFillExclamationCircleFill } from "react-icons/bs";
 
 interface CoinHistory {
   price: number;
@@ -116,6 +116,8 @@ export default function FavoriteCoins() {
             const coinHistory = coin.coinHistoryId[0]; // Access the first element of the array
             // console.log("Coin Data History:", coinHistory); // Log each coin's data
             
+            const { isOpen, onOpen, onClose } = useDisclosure();
+            
             return (
               <Tr key={coin.coinId} style={{ height: "50px" }}>
                 <Td>{coin.coinId}</Td>
@@ -138,6 +140,17 @@ export default function FavoriteCoins() {
                 <Td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(3) + "%" : "N/A"}</Td>
                 <Td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</Td>
                 <Td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
+                <Td><div><Icon
+                as={BsFillExclamationCircleFill}
+                cursor="pointer"
+                fontSize="25px"
+                mt="10px"
+                mr="30px"
+                _hover={{ opacity: "0.8" }}
+                _active={{ opacity: "1" }}
+                onClick={onOpen}
+              /></div>
+              </Td>
               </Tr>
             );
           })}
