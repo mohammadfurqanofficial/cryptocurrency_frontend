@@ -116,7 +116,7 @@ export default function FavoriteCoins() {
             const coinHistory = coin.coinHistoryId[0]; // Access the first element of the array
             // console.log("Coin Data History:", coinHistory); // Log each coin's data
             
-            const { isOpen, onOpen, onClose } = useDisclosure();
+            // const { isOpen, onOpen, onClose } = useDisclosure();
             
             return (
               <Tr key={coin.coinId} style={{ height: "50px" }}>
@@ -148,7 +148,6 @@ export default function FavoriteCoins() {
                 mr="30px"
                 _hover={{ opacity: "0.8" }}
                 _active={{ opacity: "1" }}
-                onClick={onOpen}
               /></div>
               </Td>
               </Tr>
