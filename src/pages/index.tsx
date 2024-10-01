@@ -6,7 +6,7 @@ import { api } from "../services/apiClient";
 import { SEO } from "../SEO/index";
 import { Header } from "../components/Header";
 import AlertPopup from "../components/Header/alertPopup";
-import Link from 'next/link'; // Import Link from Next.js
+import Link from 'next/link';
 import { AiFillStar } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
@@ -69,7 +69,6 @@ export default function FavoriteCoins() {
   
     fetchFavoriteCoins();
   }, []);
-  
 
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
@@ -113,43 +112,41 @@ export default function FavoriteCoins() {
         <Tbody style={{ textAlign: "center" }}>
           {favorites.map((coin) => {
             // console.log("Coin Data:", coin); // Log each coin's data
-            const coinHistory = coin.coinHistoryId[0]; // Access the first element of the array
+            const coinHistory = coin.coinHistoryId[0];
             // console.log("Coin Data History:", coinHistory); // Log each coin's data
-            
-            // const { isOpen, onOpen, onClose } = useDisclosure();
-            
+
             return (
               <Tr key={coin.coinId} style={{ height: "50px" }}>
-                <Td>{coin.coinId}</Td>
-                <Td>{coin.rank}</Td>
-                <Td>
-                  <Link href={`/coin/${coin.coinId}`} passHref>
-                    <Button size="sm" variant="link">
-                      {coin.name}
-                    </Button>
-                  </Link>
+                  <Td>{coin.coinId}</Td>
+                  <Td>{coin.rank}</Td>
+                  <Td>
+                    <Link href={`/coin/${coin.coinId}`} passHref>
+                      <Button size="sm" variant="link">
+                        {coin.name}
+                      </Button>
+                    </Link>
+                  </Td>
+                  <Td>{coin.symbol}</Td>
+                  <Td>${coinHistory?.price !== undefined ? coinHistory.price.toFixed(3) : "N/A"}</Td>
+                  <Td>${coinHistory?.volume_24h !== undefined ? coinHistory.volume_24h.toLocaleString() : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_1h !== undefined ? coinHistory.percent_change_1h.toFixed(3) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_24h !== undefined ? coinHistory.percent_change_24h.toFixed(3) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_7d !== undefined ? coinHistory.percent_change_7d.toFixed(3) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_30d !== undefined ? coinHistory.percent_change_30d.toFixed(3) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_60d !== undefined ? coinHistory.percent_change_60d.toFixed(3) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(3) + "%" : "N/A"}</Td>
+                  <Td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</Td>
+                  <Td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
+                  <Td><div><Icon
+                  as={BsFillExclamationCircleFill}
+                  cursor="pointer"
+                  fontSize="25px"
+                  mt="10px"
+                  mr="30px"
+                  _hover={{ opacity: "0.8" }}
+                  _active={{ opacity: "1" }}
+                /></div>
                 </Td>
-                <Td>{coin.symbol}</Td>
-                <Td>${coinHistory?.price !== undefined ? coinHistory.price.toFixed(3) : "N/A"}</Td>
-                <Td>${coinHistory?.volume_24h !== undefined ? coinHistory.volume_24h.toLocaleString() : "N/A"}</Td>
-                <Td>{coinHistory?.percent_change_1h !== undefined ? coinHistory.percent_change_1h.toFixed(3) + "%" : "N/A"}</Td>
-                <Td>{coinHistory?.percent_change_24h !== undefined ? coinHistory.percent_change_24h.toFixed(3) + "%" : "N/A"}</Td>
-                <Td>{coinHistory?.percent_change_7d !== undefined ? coinHistory.percent_change_7d.toFixed(3) + "%" : "N/A"}</Td>
-                <Td>{coinHistory?.percent_change_30d !== undefined ? coinHistory.percent_change_30d.toFixed(3) + "%" : "N/A"}</Td>
-                <Td>{coinHistory?.percent_change_60d !== undefined ? coinHistory.percent_change_60d.toFixed(3) + "%" : "N/A"}</Td>
-                <Td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(3) + "%" : "N/A"}</Td>
-                <Td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</Td>
-                <Td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
-                <Td><div><Icon
-                as={BsFillExclamationCircleFill}
-                cursor="pointer"
-                fontSize="25px"
-                mt="10px"
-                mr="30px"
-                _hover={{ opacity: "0.8" }}
-                _active={{ opacity: "1" }}
-              /></div>
-              </Td>
               </Tr>
             );
           })}

@@ -162,6 +162,13 @@ export function Header({ page, setPage }: HeaderProps) {
       <Menu>
         <MenuButton as={IconButton} icon={<DiAptana fontSize={"25px"} />} />
         <MenuList>
+          <MenuItem>
+            <Link href={`/coin/allcoins`} passHref>
+              <Text mr="10px" ml="10px">
+                All Coins
+              </Text>
+            </Link>
+          </MenuItem>
           <MenuItem onClick={handleLogOut}>
             <Text mr="10px" ml="10px">
               Logout
