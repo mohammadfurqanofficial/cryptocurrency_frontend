@@ -137,7 +137,7 @@ export default function FavoriteCoins() {
                   <Td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(3) + "%" : "N/A"}</Td>
                   <Td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</Td>
                   <Td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
-                  <Td>${coinHistory?.lastUpdated !== undefined ? coinHistory.lastUpdated.toLocaleString() : "N/A"}</Td>
+                  <Td>{coinHistory?.lastUpdated !== undefined ? coinHistory.lastUpdated.toLocaleString() : "N/A"}</Td>
                   <Td><div><Icon
                   as={BsFillExclamationCircleFill}
                   cursor="pointer"

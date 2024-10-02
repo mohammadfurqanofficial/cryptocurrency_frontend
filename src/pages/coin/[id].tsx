@@ -100,7 +100,7 @@ const CoinDetails = () => {
               <Td>{history?.percent_change_90d !== undefined ? history.percent_change_90d.toFixed(3) + "%" : "N/A"}</Td>
               <Td>${history?.market_cap !== undefined ? history.market_cap.toLocaleString() : "N/A"}</Td>
               <Td>${history?.fully_diluted_market_cap !== undefined ? history.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
-              <Td>${history?.lastUpdated !== undefined ? history.lastUpdated.toLocaleString() : "N/A"}</Td>
+              <Td>{history?.lastUpdated !== undefined ? history.lastUpdated.toLocaleString() : "N/A"}</Td>
             </Tr>
           ))}
         </Tbody>
