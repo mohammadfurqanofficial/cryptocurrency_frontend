@@ -9,18 +9,15 @@ import {
   Text,
   useColorMode,
   IconButton,
-  useDisclosure,
+  Button, // Import Button from Chakra UI
 } from "@chakra-ui/react";
 import axios from "axios";
 import Router from "next/router";
 import { destroyCookie } from "nookies";
 import { Dispatch, SetStateAction, useState } from "react";
-import { CriptoResponse } from "../../type/cripto";
 import { DiAptana } from "react-icons/di";
 import { AiOutlineLogout } from "react-icons/ai";
 import { Toaster } from "react-hot-toast";
-import { CSVLink } from "react-csv";
-import { FiDownload } from "react-icons/fi";
 
 interface HeaderProps {
   setPage: Dispatch<SetStateAction<number>>;
@@ -28,6 +25,7 @@ interface HeaderProps {
 }
 
 export function Header({ page, setPage }: HeaderProps) {
+  const router = Router;
   const { toggleColorMode, colorMode } = useColorMode();
   const [progress, setProgress] = useState(false);
   const [allCoinsCsvData, setAllCoinsCsvData] = useState<any[]>([]);
@@ -57,25 +55,23 @@ export function Header({ page, setPage }: HeaderProps) {
       <Text fontSize={"40"}>CriptoLab</Text>
       <Flex alignItems="center" justify="flex-end">
         {progress && <CircularProgress isIndeterminate color="blue.200" />}
-
-        {/* Download All Coins Button */}
-        {/* <CSVLink
-          data={allCoinsCsvData}
-          filename="all_coins_history.csv"
-          style={{ textDecoration: "none" }}
+        
+        {/* Back Button */}
+        <Button
+          onClick={() => router.push("/dashboard")} // Adjust the path to your dashboard route
+          mb={4}
+          colorScheme="blue" // Optional: Add color scheme
+          mr={4} // Optional: Add margin to the right for spacing
         >
-          <IconButton
-            aria-label="Download All Coins"
-            icon={<FiDownload />}
-            onClick={handleDownloadAllCoins}
-            isDisabled={allCoinsCsvData.length === 0}
-          />
-          <Text ml="10px">Download All Coins</Text>
-        </CSVLink> */}
-
+          Back to Dashboard
+        </Button>
+        
         <Menu>
           <MenuButton as={IconButton} icon={<DiAptana fontSize={"25px"} />} />
           <MenuList>
+            <MenuItem onClick={() => router.push("/all-coins")}> {/* Link to All Coins page */}
+              <Text>All Coins</Text>
+            </MenuItem>
             <MenuItem onClick={handleLogOut}>
               <Text>Logout</Text>
               <Icon as={AiOutlineLogout} />
