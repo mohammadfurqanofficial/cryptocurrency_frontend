@@ -88,23 +88,31 @@ export function Header({ page, setPage }: HeaderProps) {
       >
         {/* Coin-specific download buttons */}
         {allcoins.map((coin) => (
-          <CSVLink
-            key={coin.id}
-            data={coinCsvData}
-            filename={`coin_${coin.id}_history.csv`}
-            className="btn btn-download"
-            style={{ border: "1px solid red", display: "flex", alignItems: "center" }}  // Border for visibility
-          >
-            <IconButton
-              aria-label="Download CSV"
-              icon={<FiDownload />}
-              size="sm"
-              onClick={() => handleDownloadCoin(Number(coin.id))}
-              m="0 10px"
-            />
-            <Text fontSize="12px" ml="5px">{coin.name}</Text>
-          </CSVLink>
-        ))}
+  <Flex key={coin.id} alignItems="center">
+    {/* Conditionally render the download button */}
+    <IconButton
+      aria-label="Download CSV"
+      icon={<FiDownload />}
+      size="sm"
+      onClick={() => handleDownloadCoin(Number(coin.id))}
+      m="0 10px"
+    />
+    <Text fontSize="12px" ml="5px">{coin.name}</Text>
+
+    {/* Conditionally show the CSV link after data is available */}
+    {coinCsvData.length > 0 && (
+      <CSVLink
+        data={coinCsvData}
+        filename={`coin_${coin.id}_history.csv`}
+        className="btn btn-download"
+        style={{ border: "1px solid red", display: "flex", alignItems: "center" }}
+      >
+        Download CSV
+      </CSVLink>
+    )}
+  </Flex>
+))}
+
 
         <Flex mt="4px" ml="20px">
           <Icon
