@@ -89,36 +89,40 @@ const CoinDetails = () => {
   // Fetch data for CSV download with the selected date
   const handleDownloadCoinHistory = async () => {
     if (!selectedDate) {
-      console.warn("No date selected for CSV download");
-      return; // Early return if no date is selected
+        console.warn("No date selected for CSV download");
+        return; // Early return if no date is selected
     }
-    
+
     // Check if coinData is null
     if (!coinData) {
-      console.error("coinData is not available.");
-      return; // Early return if coinData is not set
+        console.error("coinData is not available.");
+        return; // Early return if coinData is not set
     }
-  
+
     setCsvLoading(true);
     try {
-      const { data } = await api.get(`/coins/coin-history/download/${id}?date=${selectedDate}`);
-      console.log("API response data: ", data); // Inspect this in the console
-      
-      // Check if the response is as expected
-      if (data && Array.isArray(data)) {
-        setCsvData(data);  // Set CSV data if it's an array
-        
-        // Download CSV file
-        downloadCSV(data, `${coinData.name}_history_${selectedDate}.csv`);
-      } else {
-        console.warn("Unexpected data format", data);
-        setCsvData([]);  // Set to empty array if the format is incorrect
-      }
-    } catch (error) {
-      console.error("Error downloading coin history", error);
+        const response = await api.get(`/coins/coin-history/download/${id}?date=${selectedDate}`);
+
+        // Check if the response is successful
+        if (response.status === 200 && Array.isArray(response.data)) {
+            setCsvData(response.data); // Set CSV data if it's an array
+
+            // Download CSV file
+            downloadCSV(response.data, `${coinData.name}_history_${selectedDate}.csv`);
+        } else {
+            console.warn("Unexpected data format", response.data);
+            setCsvData([]); // Set to empty array if the format is incorrect
+        }
+    } catch (error: any) { // Use 'any' type for error
+        // Check if the error response is 404
+        if (error.response && error.response.status === 404) {
+            alert(error.response.data.message || "No data found for the selected date."); // Show alert with error message
+        } else {
+            console.error("Error downloading coin history", error);
+        }
     }
     setCsvLoading(false);
-  };  
+};
 
   if (loading) {
     return <p>Loading...</p>;
