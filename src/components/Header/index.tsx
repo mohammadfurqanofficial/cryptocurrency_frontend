@@ -9,12 +9,12 @@ import {
   Text,
   useColorMode,
   IconButton,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import axios from "axios";
 import Router from "next/router";
 import { destroyCookie } from "nookies";
-import { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { CriptoResponse } from "../../type/cripto";
 import { DiAptana } from "react-icons/di";
 import {
@@ -23,8 +23,12 @@ import {
   AiOutlineLogout,
 } from "react-icons/ai";
 import { Toaster } from "react-hot-toast";
+import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
+import { headersAll } from "../../csv";
+import { BsHeartFill, BsFillExclamationCircleFill } from "react-icons/bs";
 import Link from "next/link";
+import AlertPopup from "../Header/alertPopup";
 
 interface HeaderProps {
   setPage: Dispatch<SetStateAction<number>>;
@@ -35,26 +39,18 @@ export function Header({ page, setPage }: HeaderProps) {
   const { toggleColorMode, colorMode } = useColorMode();
   const [progress, setProgress] = useState(false);
   const [allcoins, setAllcoins] = useState<CriptoResponse[]>([]);
+  const [download, setDownload] = useState(false);
+  const [coinCsvData, setCoinCsvData] = useState<any[]>([]);
+
+  const dataCSV = {
+    headers: headersAll,
+    data: allcoins,
+  };
 
   function handleLogOut() {
     destroyCookie(null, "cripto.auth");
     Router.push("/login");
   }
-
-  useEffect(() => {
-    // Fetch all coins initially, replace with your real API call
-    const fetchCoins = async () => {
-      try {
-        const { data } = await axios.get(
-          `${process.env.NEXT_PUBLIC_URL_BACKEND}/coins`
-        );
-        setAllcoins(data);
-      } catch (error) {
-        console.error("Error fetching coins", error);
-      }
-    };
-    fetchCoins();
-  }, []);
 
   async function handlePrevPage() {
     if (page - 1 <= 0) {
@@ -70,26 +66,39 @@ export function Header({ page, setPage }: HeaderProps) {
     setPage(page + 1);
   }
 
-  // Function to trigger CSV download
-  async function handleDownloadCoin(coinId: number) {
+  async function handleDownload() {
     setProgress(true);
+
+    if (allcoins.length > 0) {
+      setDownload(true);
+      setProgress(false);
+      return;
+    }
+
+    let number = 0;
+
+    while (number < 36) {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_URL_BACKEND}/coin/take/all/?start=${number}`
+      );
+      setAllcoins((c) => [...c, ...data]);
+      number++;
+    }
+
+    setDownload(true);
+    setProgress(false);
+  }
+
+  // Download specific coin CSV
+  async function handleDownloadCoin(coinId: number) {
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_URL_BACKEND}/coins/coin-history/download/${coinId}?date=2024-10-04`
       );
-
-      // Convert data to a CSV format and trigger the download
-      const blob = new Blob([data], { type: "text/csv" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `coin_${coinId}_history.csv`;
-      a.click();
-      window.URL.revokeObjectURL(url); // Clean up the URL object
+      setCoinCsvData(data); // Set the coin data for CSV download
     } catch (error) {
       console.error("Error downloading coin history", error);
     }
-    setProgress(false);
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -105,7 +114,28 @@ export function Header({ page, setPage }: HeaderProps) {
         mr="20px"
         align="center"
       >
+        {download && (
+          <CSVLink
+            {...dataCSV}
+            style={{
+              marginTop: "5px",
+              marginRight: "15px",
+              border: "1px solid #ddd",
+              display: "inline",
+              height: "30px",
+              padding: "3px",
+              borderRadius: "5px",
+            }}
+          >
+            Download All Coins
+          </CSVLink>
+        )}
         {progress && (
+          <Text fontSize="20px" mt="5px" mr="10px">
+            {allcoins.length}
+          </Text>
+        )}
+        {progress ? (
           <CircularProgress
             isIndeterminate
             color="blue.200"
@@ -113,21 +143,38 @@ export function Header({ page, setPage }: HeaderProps) {
             mt="4px"
             mr="4px"
           />
+        ) : (
+          !download && (
+            <Icon
+              as={FiDownload}
+              fontSize={"30px"}
+              borderRadius="10px"
+              mt="6px"
+              mr="10px"
+              cursor="pointer"
+              onClick={handleDownload}
+            />
+          )
         )}
 
         {/* Coin-specific download buttons */}
         {allcoins.map((coin) => (
-          <Flex key={coin.id} align="center" m="0 10px">
+          <CSVLink
+            key={coin.id}
+            data={coinCsvData}
+            filename={`coin_${coin.id}_history.csv`}
+            className="btn btn-download"
+          >
             <IconButton
               aria-label="Download CSV"
               icon={<FiDownload />}
               size="sm"
-              onClick={() => handleDownloadCoin(Number(coin.id))}
+              onClick={() => handleDownloadCoin(Number(coin.id))}  // Convert to number
+              m="0 10px"
             />
-            <Text fontSize="12px" ml="5px">
-              {coin.name}
-            </Text>
-          </Flex>
+
+            <Text fontSize="12px">{coin.name}</Text>
+          </CSVLink>
         ))}
 
         <Flex mt="4px" ml="20px">
@@ -166,7 +213,7 @@ export function Header({ page, setPage }: HeaderProps) {
           </MenuItem>
           <MenuItem onClick={() => toggleColorMode()}>
             <Text mr="10px" ml="10px">
-              Change theme to {colorMode === "light" ? "Dark" : "Light"}
+              Change for theme {colorMode === "light" ? "Dark" : "Light"}
             </Text>
           </MenuItem>
         </MenuList>
