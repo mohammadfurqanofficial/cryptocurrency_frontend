@@ -63,12 +63,14 @@ const CoinDetails = () => {
     setCsvLoading(true);
     try {
       const { data } = await api.get(`/coins/coin-history/download/${id}?date=${selectedDate}`);
-      console.log(setCsvData(data)); // Save data for CSV
+      console.log("API response data: ", data); // Log the response to check the content
+      setCsvData(data); // Save data for CSV
     } catch (error) {
       console.error("Error downloading coin history", error);
     }
     setCsvLoading(false);
   };
+
 
   if (loading) {
     return <p>Loading...</p>;
