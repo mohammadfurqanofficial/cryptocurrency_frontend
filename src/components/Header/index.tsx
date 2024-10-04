@@ -98,22 +98,20 @@ export function Header({ page, setPage }: HeaderProps) {
 
         {/* Coin-specific download buttons */}
         {allcoins.map((coin) => (
-          <CSVLink
-            key={coin.id}
-            data={coinCsvData}
-            filename={`coin_${coin.id}_history.csv`}
-            className="btn btn-download"
-          >
-            <IconButton
-              aria-label="Download CSV"
-              icon={<FiDownload />}
-              size="sm"
-              onClick={() => handleDownloadCoin(Number(coin.id))} // Convert to number
-              m="0 10px"
-            />
-
-            <Text fontSize="12px">{coin.name}</Text>
-          </CSVLink>
+          <Flex key={coin.id} align="center" m="0 10px">
+            <CSVLink
+              data={coinCsvData}
+              filename={`coin_${coin.id}_history.csv`}
+              style={{ display: "flex", alignItems: "center", gap: "5px" }}
+            >
+              <IconButton
+                aria-label="Download CSV"
+                icon={<FiDownload />}
+                size="sm"
+              />
+              <Text fontSize="12px">{coin.name}</Text>
+            </CSVLink>
+          </Flex>
         ))}
 
         <Flex mt="4px" ml="20px">
