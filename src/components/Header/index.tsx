@@ -49,6 +49,9 @@ export function Header({ page, setPage }: HeaderProps) {
     Router.push("/login");
   }
 
+  // Check if we are on a coin single page (e.g., "/coins/[id]")
+  const isCoinSinglePage = router.asPath.startsWith("/coins/");
+
   return (
     <Flex justify="space-between" w="full" px="30px" mt="20px" mb="20px">
       <Toaster />
@@ -57,6 +60,16 @@ export function Header({ page, setPage }: HeaderProps) {
         {progress && <CircularProgress isIndeterminate color="blue.200" />}
         
         {/* Back Button */}
+
+        {isCoinSinglePage && (
+          <IconButton
+            aria-label='Back to Dashboard'
+            icon={<FiArrowLeft />}
+            mr={4}
+            onClick={() => router.push("/")} // Adjust the path to your dashboard route
+          />
+        )}
+        
         <IconButton
             aria-label='Back to Dashboard'
             icon={<FiArrowLeft />}
