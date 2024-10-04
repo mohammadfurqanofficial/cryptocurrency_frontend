@@ -16,7 +16,6 @@ import {
 import { api } from "../../services/apiClient";
 import { SEO } from "../../SEO/index";
 import { Header } from "../../components/Header";
-import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
 import { Parser } from 'json2csv'; // Import the json2csv library
 

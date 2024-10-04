@@ -18,6 +18,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { DiAptana } from "react-icons/di";
 import { AiOutlineLogout } from "react-icons/ai";
 import { Toaster } from "react-hot-toast";
+import { FiArrowLeft } from "react-icons/fi";
 
 interface HeaderProps {
   setPage: Dispatch<SetStateAction<number>>;
@@ -28,7 +29,6 @@ export function Header({ page, setPage }: HeaderProps) {
   const router = Router;
   const { toggleColorMode, colorMode } = useColorMode();
   const [progress, setProgress] = useState(false);
-  const [allCoinsCsvData, setAllCoinsCsvData] = useState<any[]>([]);
 
   // Fetch all coins data for CSV download
   // async function handleDownloadAllCoins() {
@@ -57,15 +57,11 @@ export function Header({ page, setPage }: HeaderProps) {
         {progress && <CircularProgress isIndeterminate color="blue.200" />}
         
         {/* Back Button */}
-        <Button
-          onClick={() => router.push("/dashboard")} // Adjust the path to your dashboard route
-          mb={4}
-          colorScheme="blue" // Optional: Add color scheme
-          mr={4} // Optional: Add margin to the right for spacing
-        >
-          Back to Dashboard
-        </Button>
-        
+        <IconButton
+            aria-label='Back to Dashboard'
+            icon={<FiArrowLeft />}
+            onClick={() => router.push("/")}
+          />
         <Menu>
           <MenuButton as={IconButton} icon={<DiAptana fontSize={"25px"} />} />
           <MenuList>
