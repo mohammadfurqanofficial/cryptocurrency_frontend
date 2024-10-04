@@ -33,18 +33,18 @@ export function Header({ page, setPage }: HeaderProps) {
   const [allCoinsCsvData, setAllCoinsCsvData] = useState<any[]>([]);
 
   // Fetch all coins data for CSV download
-  async function handleDownloadAllCoins() {
-    setProgress(true);
-    try {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL_BACKEND}/coins`
-      );
-      setAllCoinsCsvData(data); // Save the data for CSV download
-    } catch (error) {
-      console.error("Error fetching coins", error);
-    }
-    setProgress(false);
-  }
+  // async function handleDownloadAllCoins() {
+  //   setProgress(true);
+  //   try {
+  //     const { data } = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_URL_BACKEND}/coins`
+  //     );
+  //     setAllCoinsCsvData(data); // Save the data for CSV download
+  //   } catch (error) {
+  //     console.error("Error fetching coins", error);
+  //   }
+  //   setProgress(false);
+  // }
 
   function handleLogOut() {
     destroyCookie(null, "cripto.auth");
@@ -59,7 +59,7 @@ export function Header({ page, setPage }: HeaderProps) {
         {progress && <CircularProgress isIndeterminate color="blue.200" />}
 
         {/* Download All Coins Button */}
-        <CSVLink
+        {/* <CSVLink
           data={allCoinsCsvData}
           filename="all_coins_history.csv"
           style={{ textDecoration: "none" }}
@@ -71,7 +71,7 @@ export function Header({ page, setPage }: HeaderProps) {
             isDisabled={allCoinsCsvData.length === 0}
           />
           <Text ml="10px">Download All Coins</Text>
-        </CSVLink>
+        </CSVLink> */}
 
         <Menu>
           <MenuButton as={IconButton} icon={<DiAptana fontSize={"25px"} />} />
