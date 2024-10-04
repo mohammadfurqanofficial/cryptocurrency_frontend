@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import Router from "next/router";
 import { destroyCookie } from "nookies";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { CriptoResponse } from "../../type/cripto";
 import { DiAptana } from "react-icons/di";
 import {
@@ -25,9 +25,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
-import { BsHeartFill, BsFillExclamationCircleFill } from "react-icons/bs";
 import Link from "next/link";
-import AlertPopup from "../Header/alertPopup";
 
 interface HeaderProps {
   setPage: Dispatch<SetStateAction<number>>;
@@ -44,6 +42,19 @@ export function Header({ page, setPage }: HeaderProps) {
     destroyCookie(null, "cripto.auth");
     Router.push("/login");
   }
+
+  useEffect(() => {
+    // Fetch all coins initially, replace with your real API call
+    const fetchCoins = async () => {
+      try {
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_URL_BACKEND}/coins`);
+        setAllcoins(data);
+      } catch (error) {
+        console.error("Error fetching coins", error);
+      }
+    };
+    fetchCoins();
+  }, []);
 
   async function handlePrevPage() {
     if (page - 1 <= 0) {
@@ -64,7 +75,7 @@ export function Header({ page, setPage }: HeaderProps) {
     setProgress(true);
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL_BACKEND}/coin-history-download/${coinId}?date=2024-10-04`
+        `${process.env.NEXT_PUBLIC_URL_BACKEND}/coins/coin-history/download/${coinId}?date=2024-10-04`
       );
       setCoinCsvData(data); // Set the coin data for CSV download
     } catch (error) {
@@ -108,6 +119,7 @@ export function Header({ page, setPage }: HeaderProps) {
                 aria-label="Download CSV"
                 icon={<FiDownload />}
                 size="sm"
+                onClick={() => handleDownloadCoin(Number(coin.id))} // Convert to number
               />
               <Text fontSize="12px">{coin.name}</Text>
             </CSVLink>
@@ -150,7 +162,7 @@ export function Header({ page, setPage }: HeaderProps) {
           </MenuItem>
           <MenuItem onClick={() => toggleColorMode()}>
             <Text mr="10px" ml="10px">
-              Change for theme {colorMode === "light" ? "Dark" : "Light"}
+              Change theme to {colorMode === "light" ? "Dark" : "Light"}
             </Text>
           </MenuItem>
         </MenuList>
