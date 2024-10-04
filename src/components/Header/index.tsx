@@ -25,7 +25,6 @@ import {
 import { Toaster } from "react-hot-toast";
 import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
-import { headersAll } from "../../csv";
 import { BsHeartFill, BsFillExclamationCircleFill } from "react-icons/bs";
 import Link from "next/link";
 import AlertPopup from "../Header/alertPopup";
@@ -39,13 +38,7 @@ export function Header({ page, setPage }: HeaderProps) {
   const { toggleColorMode, colorMode } = useColorMode();
   const [progress, setProgress] = useState(false);
   const [allcoins, setAllcoins] = useState<CriptoResponse[]>([]);
-  const [download, setDownload] = useState(false);
   const [coinCsvData, setCoinCsvData] = useState<any[]>([]);
-
-  const dataCSV = {
-    headers: headersAll,
-    data: allcoins,
-  };
 
   function handleLogOut() {
     destroyCookie(null, "cripto.auth");
@@ -66,31 +59,9 @@ export function Header({ page, setPage }: HeaderProps) {
     setPage(page + 1);
   }
 
-  async function handleDownload() {
-    setProgress(true);
-
-    if (allcoins.length > 0) {
-      setDownload(true);
-      setProgress(false);
-      return;
-    }
-
-    let number = 0;
-
-    while (number < 36) {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL_BACKEND}/coin/take/all/?start=${number}`
-      );
-      setAllcoins((c) => [...c, ...data]);
-      number++;
-    }
-
-    setDownload(true);
-    setProgress(false);
-  }
-
   // Download specific coin CSV
   async function handleDownloadCoin(coinId: number) {
+    setProgress(true);
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_URL_BACKEND}/coin-history-download/${coinId}?date=2024-10-04`
@@ -99,6 +70,7 @@ export function Header({ page, setPage }: HeaderProps) {
     } catch (error) {
       console.error("Error downloading coin history", error);
     }
+    setProgress(false);
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -114,28 +86,7 @@ export function Header({ page, setPage }: HeaderProps) {
         mr="20px"
         align="center"
       >
-        {download && (
-          <CSVLink
-            {...dataCSV}
-            style={{
-              marginTop: "5px",
-              marginRight: "15px",
-              border: "1px solid #ddd",
-              display: "inline",
-              height: "30px",
-              padding: "3px",
-              borderRadius: "5px",
-            }}
-          >
-            Download All Coins
-          </CSVLink>
-        )}
         {progress && (
-          <Text fontSize="20px" mt="5px" mr="10px">
-            {allcoins.length}
-          </Text>
-        )}
-        {progress ? (
           <CircularProgress
             isIndeterminate
             color="blue.200"
@@ -143,18 +94,6 @@ export function Header({ page, setPage }: HeaderProps) {
             mt="4px"
             mr="4px"
           />
-        ) : (
-          !download && (
-            <Icon
-              as={FiDownload}
-              fontSize={"30px"}
-              borderRadius="10px"
-              mt="6px"
-              mr="10px"
-              cursor="pointer"
-              onClick={handleDownload}
-            />
-          )
         )}
 
         {/* Coin-specific download buttons */}
@@ -169,7 +108,7 @@ export function Header({ page, setPage }: HeaderProps) {
               aria-label="Download CSV"
               icon={<FiDownload />}
               size="sm"
-              onClick={() => handleDownloadCoin(Number(coin.id))}  // Convert to number
+              onClick={() => handleDownloadCoin(Number(coin.id))} // Convert to number
               m="0 10px"
             />
 
