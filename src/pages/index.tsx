@@ -36,7 +36,7 @@ interface FavoriteCoin {
 export default function FavoriteCoins() {
   const [favorites, setFavorites] = useState<FavoriteCoin[]>([]);
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1); // Add page state management
   const router = useRouter();
 

@@ -50,7 +50,7 @@ export function Header({ page, setPage }: HeaderProps) {
   }
 
   // Check if we are on a coin single page (e.g., "/coins/[id]")
-  const isCoinSinglePage = router.asPath.startsWith("/coins/");
+  const isCoinSinglePage = router.asPath.startsWith("/coin/");
 
   return (
     <Flex justify="space-between" w="full" px="30px" mt="20px" mb="20px">
