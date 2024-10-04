@@ -93,7 +93,7 @@ export function Header({ page, setPage }: HeaderProps) {
   async function handleDownloadCoin(coinId: number) {
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL_BACKEND}/api/coin-history-download/${coinId}?date=2024-10-04`
+        `${process.env.NEXT_PUBLIC_URL_BACKEND}/coin-history-download/${coinId}?date=2024-10-04`
       );
       setCoinCsvData(data); // Set the coin data for CSV download
     } catch (error) {

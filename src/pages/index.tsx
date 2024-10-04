@@ -60,7 +60,7 @@ export default function FavoriteCoins() {
     async function fetchFavoriteCoins() {
       try {
         const { data } = await api.get("/favorites/all-favorites");
-        console.log("API Response:", data); // Log the entire response
+        // console.log("API Response:", data); // Log the entire response
         setFavorites(data.favorites); // Assuming the API returns the favorites in this structure
       } catch (e: any) {
         console.log(e.message);

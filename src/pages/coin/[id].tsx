@@ -43,7 +43,7 @@ const CoinDetails = () => {
       const fetchCoinHistory = async () => {
         try {
           const { data } = await api.get(`/coins/coin-history/${id}`);
-          console.log(data);
+          // console.log(data);
           setCoinData(data.coin[0]); // Assuming `data.coin` array
           setLoading(false);
         } catch (error: any) {
