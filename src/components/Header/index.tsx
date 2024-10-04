@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import Router from "next/router";
 import { destroyCookie } from "nookies";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { CriptoResponse } from "../../type/cripto";
 import { DiAptana } from "react-icons/di";
 import {
@@ -26,9 +26,7 @@ import { Toaster } from "react-hot-toast";
 import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
 import { headersAll } from "../../csv";
-import { BsHeartFill, BsFillExclamationCircleFill } from "react-icons/bs";
 import Link from "next/link";
-import AlertPopup from "../Header/alertPopup";
 
 interface HeaderProps {
   setPage: Dispatch<SetStateAction<number>>;
@@ -39,7 +37,6 @@ export function Header({ page, setPage }: HeaderProps) {
   const { toggleColorMode, colorMode } = useColorMode();
   const [progress, setProgress] = useState(false);
   const [allcoins, setAllcoins] = useState<CriptoResponse[]>([]);
-  const [download, setDownload] = useState(false);
   const [coinCsvData, setCoinCsvData] = useState<any[]>([]);
 
   const dataCSV = {
@@ -66,42 +63,17 @@ export function Header({ page, setPage }: HeaderProps) {
     setPage(page + 1);
   }
 
-  async function handleDownload() {
-    setProgress(true);
-
-    if (allcoins.length > 0) {
-      setDownload(true);
-      setProgress(false);
-      return;
-    }
-
-    let number = 0;
-
-    while (number < 36) {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL_BACKEND}/coin/take/all/?start=${number}`
-      );
-      setAllcoins((c) => [...c, ...data]);
-      number++;
-    }
-
-    setDownload(true);
-    setProgress(false);
-  }
-
-  // Download specific coin CSV
   async function handleDownloadCoin(coinId: number) {
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_URL_BACKEND}/coins/coin-history/download/${coinId}?date=2024-10-04`
       );
-      setCoinCsvData(data); // Set the coin data for CSV download
+      setCoinCsvData(data); // Ensure coinCsvData is populated correctly
+      console.log(data);  // Debug if data is correct
     } catch (error) {
       console.error("Error downloading coin history", error);
     }
   }
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Flex justify="space-between" w="full" px="30px" mt="20px" mb="20px">
@@ -121,16 +93,16 @@ export function Header({ page, setPage }: HeaderProps) {
             data={coinCsvData}
             filename={`coin_${coin.id}_history.csv`}
             className="btn btn-download"
+            style={{ border: "1px solid red", display: "flex", alignItems: "center" }}  // Border for visibility
           >
             <IconButton
               aria-label="Download CSV"
               icon={<FiDownload />}
               size="sm"
-              onClick={() => handleDownloadCoin(Number(coin.id))}  // Convert to number
+              onClick={() => handleDownloadCoin(Number(coin.id))}
               m="0 10px"
             />
-
-            <Text fontSize="12px">{coin.name}</Text>
+            <Text fontSize="12px" ml="5px">{coin.name}</Text>
           </CSVLink>
         ))}
 
@@ -170,7 +142,7 @@ export function Header({ page, setPage }: HeaderProps) {
           </MenuItem>
           <MenuItem onClick={() => toggleColorMode()}>
             <Text mr="10px" ml="10px">
-              Change for theme {colorMode === "light" ? "Dark" : "Light"}
+              Change theme to {colorMode === "light" ? "Dark" : "Light"}
             </Text>
           </MenuItem>
         </MenuList>
