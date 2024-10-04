@@ -107,7 +107,7 @@ export default function FavoriteCoins() {
             <Th>Market Cap</Th>
             <Th>Market Cap Dominance</Th>
             <Th>Last Updated</Th>
-            <Th>Alert</Th>
+            {/* <Th>Alert</Th> */}
           </Tr>
         </Thead>
         <Tbody style={{ textAlign: "center" }}>
@@ -139,7 +139,7 @@ export default function FavoriteCoins() {
                   <Td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</Td>
                   <Td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
                   <Td>{coinHistory?.lastUpdated !== undefined ? coinHistory.lastUpdated.toLocaleString() : "N/A"}</Td>
-                  <Td><div><Icon
+                  {/* <Td><div><Icon
                   as={BsFillExclamationCircleFill}
                   cursor="pointer"
                   fontSize="25px"
@@ -148,7 +148,7 @@ export default function FavoriteCoins() {
                   _hover={{ opacity: "0.8" }}
                   _active={{ opacity: "1" }}
                 /></div>
-                </Td>
+                </Td> */}
               </Tr>
             );
           })}
