@@ -60,6 +60,7 @@ export function Header({ page, setPage }: HeaderProps) {
         <IconButton
             aria-label='Back to Dashboard'
             icon={<FiArrowLeft />}
+            mr={4}
             onClick={() => router.push("/")}
           />
         <Menu>
