@@ -9,7 +9,7 @@ import {
   Text,
   useColorMode,
   IconButton,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import Router from "next/router";
@@ -23,7 +23,6 @@ import {
   AiOutlineLogout,
 } from "react-icons/ai";
 import { Toaster } from "react-hot-toast";
-import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
 import Link from "next/link";
 
@@ -36,7 +35,6 @@ export function Header({ page, setPage }: HeaderProps) {
   const { toggleColorMode, colorMode } = useColorMode();
   const [progress, setProgress] = useState(false);
   const [allcoins, setAllcoins] = useState<CriptoResponse[]>([]);
-  const [coinCsvData, setCoinCsvData] = useState<any[]>([]);
 
   function handleLogOut() {
     destroyCookie(null, "cripto.auth");
@@ -47,7 +45,9 @@ export function Header({ page, setPage }: HeaderProps) {
     // Fetch all coins initially, replace with your real API call
     const fetchCoins = async () => {
       try {
-        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_URL_BACKEND}/coins`);
+        const { data } = await axios.get(
+          `${process.env.NEXT_PUBLIC_URL_BACKEND}/coins`
+        );
         setAllcoins(data);
       } catch (error) {
         console.error("Error fetching coins", error);
@@ -70,14 +70,22 @@ export function Header({ page, setPage }: HeaderProps) {
     setPage(page + 1);
   }
 
-  // Download specific coin CSV
+  // Function to trigger CSV download
   async function handleDownloadCoin(coinId: number) {
     setProgress(true);
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_URL_BACKEND}/coins/coin-history/download/${coinId}?date=2024-10-04`
       );
-      setCoinCsvData(data); // Set the coin data for CSV download
+
+      // Convert data to a CSV format and trigger the download
+      const blob = new Blob([data], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `coin_${coinId}_history.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url); // Clean up the URL object
     } catch (error) {
       console.error("Error downloading coin history", error);
     }
@@ -110,19 +118,15 @@ export function Header({ page, setPage }: HeaderProps) {
         {/* Coin-specific download buttons */}
         {allcoins.map((coin) => (
           <Flex key={coin.id} align="center" m="0 10px">
-            <CSVLink
-              data={coinCsvData}
-              filename={`coin_${coin.id}_history.csv`}
-              style={{ display: "flex", alignItems: "center", gap: "5px" }}
-            >
-              <IconButton
-                aria-label="Download CSV"
-                icon={<FiDownload />}
-                size="sm"
-                onClick={() => handleDownloadCoin(Number(coin.id))} // Convert to number
-              />
-              <Text fontSize="12px">{coin.name}</Text>
-            </CSVLink>
+            <IconButton
+              aria-label="Download CSV"
+              icon={<FiDownload />}
+              size="sm"
+              onClick={() => handleDownloadCoin(Number(coin.id))}
+            />
+            <Text fontSize="12px" ml="5px">
+              {coin.name}
+            </Text>
           </Flex>
         ))}
 
