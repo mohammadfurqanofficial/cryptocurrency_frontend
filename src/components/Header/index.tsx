@@ -114,49 +114,6 @@ export function Header({ page, setPage }: HeaderProps) {
         mr="20px"
         align="center"
       >
-        {download && (
-          <CSVLink
-            {...dataCSV}
-            style={{
-              marginTop: "5px",
-              marginRight: "15px",
-              border: "1px solid #ddd",
-              display: "inline",
-              height: "30px",
-              padding: "3px",
-              borderRadius: "5px",
-            }}
-          >
-            Download All Coins
-          </CSVLink>
-        )}
-        {progress && (
-          <Text fontSize="20px" mt="5px" mr="10px">
-            {allcoins.length}
-          </Text>
-        )}
-        {progress ? (
-          <CircularProgress
-            isIndeterminate
-            color="blue.200"
-            size={"2rem"}
-            mt="4px"
-            mr="4px"
-          />
-        ) : (
-          !download && (
-            <Icon
-              as={FiDownload}
-              fontSize={"30px"}
-              borderRadius="10px"
-              mt="6px"
-              mr="10px"
-              cursor="pointer"
-              onClick={handleDownload}
-            />
-          )
-        )}
-
         {/* Coin-specific download buttons */}
         {allcoins.map((coin) => (
           <CSVLink
