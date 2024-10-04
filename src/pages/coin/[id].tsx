@@ -1,11 +1,24 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Flex, Text, Table, Thead, Tbody, Tr, Th, Td, IconButton, CircularProgress, Input } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  IconButton,
+  CircularProgress,
+  Input,
+} from "@chakra-ui/react";
 import { api } from "../../services/apiClient";
 import { SEO } from "../../SEO/index";
 import { Header } from "../../components/Header";
 import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
+import { Parser } from 'json2csv'; // Import the json2csv library
 
 // Define the shape of your coin data based on your API response
 interface CoinHistory {
@@ -58,22 +71,55 @@ const CoinDetails = () => {
     }
   }, [id]);
 
+  // Function to download CSV
+  const downloadCSV = (data: any[], filename: string): void => {
+    const json2csvParser = new Parser();
+    const csv = json2csvParser.parse(data);
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+  
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Fetch data for CSV download with the selected date
   const handleDownloadCoinHistory = async () => {
+    if (!selectedDate) {
+      console.warn("No date selected for CSV download");
+      return; // Early return if no date is selected
+    }
+    
+    // Check if coinData is null
+    if (!coinData) {
+      console.error("coinData is not available.");
+      return; // Early return if coinData is not set
+    }
+  
     setCsvLoading(true);
     try {
       const { data } = await api.get(`/coins/coin-history/download/${id}?date=${selectedDate}`);
+      console.log("API response data: ", data); // Inspect this in the console
       
-      console.log("API response data: ", data); // Log the response here to inspect
-      
-      setCsvData(data); // Save data for CSV
+      // Check if the response is as expected
+      if (data && Array.isArray(data)) {
+        setCsvData(data);  // Set CSV data if it's an array
+        
+        // Download CSV file
+        downloadCSV(data, `${coinData.name}_history_${selectedDate}.csv`);
+      } else {
+        console.warn("Unexpected data format", data);
+        setCsvData([]);  // Set to empty array if the format is incorrect
+      }
     } catch (error) {
       console.error("Error downloading coin history", error);
     }
     setCsvLoading(false);
-  };
-  
-
+  };  
 
   if (loading) {
     return <p>Loading...</p>;
@@ -106,15 +152,12 @@ const CoinDetails = () => {
         {csvLoading ? (
           <CircularProgress isIndeterminate color="blue.200" />
         ) : (
-          <CSVLink data={csvData} filename={`${coinData.name}_history_${selectedDate}.csv`}>
-            <IconButton
-              aria-label="Download Coin History"
-              icon={<FiDownload />}
-              onClick={handleDownloadCoinHistory}
-              isDisabled={!selectedDate || csvData.length === 0} // Disable if no date is selected
-            />
-            <Text ml="10px">Download Coin History</Text>
-          </CSVLink>
+          <IconButton
+            aria-label="Download Coin History"
+            icon={<FiDownload />}
+            onClick={handleDownloadCoinHistory}
+            isDisabled={!selectedDate || csvLoading} // Disable if no date is selected or loading
+          />
         )}
       </Flex>
 
