@@ -12,13 +12,14 @@ import {
   IconButton,
   CircularProgress,
   Input,
+  Button, // Import Button from Chakra UI
 } from "@chakra-ui/react";
 import { api } from "../../services/apiClient";
 import { SEO } from "../../SEO/index";
 import { Header } from "../../components/Header";
 import { CSVLink } from "react-csv";
 import { FiDownload } from "react-icons/fi";
-import { Parser } from 'json2csv'; // Import the json2csv library
+import { Parser } from 'json2csv';
 
 // Define the shape of your coin data based on your API response
 interface CoinHistory {
@@ -50,9 +51,9 @@ const CoinDetails = () => {
   const { id } = router.query;
   const [coinData, setCoinData] = useState<CoinData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [csvData, setCsvData] = useState<CoinHistory[]>([]); // Data for CSV download
+  const [csvData, setCsvData] = useState<CoinHistory[]>([]);
   const [csvLoading, setCsvLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(""); // State for the selected date
+  const [selectedDate, setSelectedDate] = useState("");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const CoinDetails = () => {
       const fetchCoinHistory = async () => {
         try {
           const { data } = await api.get(`/coins/coin-history/${id}`);
-          setCoinData(data.coin[0]); // Assuming `data.coin` array
+          setCoinData(data.coin[0]);
           setLoading(false);
         } catch (error: any) {
           console.error("Failed to fetch coin history:", error.message);
@@ -71,7 +72,6 @@ const CoinDetails = () => {
     }
   }, [id]);
 
-  // Function to download CSV
   const downloadCSV = (data: any[], filename: string): void => {
     const json2csvParser = new Parser();
     const csv = json2csvParser.parse(data);
@@ -87,33 +87,28 @@ const CoinDetails = () => {
     document.body.removeChild(link);
   };
 
-  // Fetch data for CSV download with the selected date
   const handleDownloadCoinHistory = async () => {
     if (!selectedDate) {
       console.warn("No date selected for CSV download");
-      return; // Early return if no date is selected
+      return;
     }
     
-    // Check if coinData is null
     if (!coinData) {
       console.error("coinData is not available.");
-      return; // Early return if coinData is not set
+      return;
     }
   
     setCsvLoading(true);
     try {
       const { data } = await api.get(`/coins/coin-history/download/${id}?date=${selectedDate}`);
-      console.log("API response data: ", data); // Inspect this in the console
+      console.log("API response data: ", data);
       
-      // Check if the response is as expected
       if (data && Array.isArray(data)) {
-        setCsvData(data);  // Set CSV data if it's an array
-        
-        // Download CSV file
+        setCsvData(data);  
         downloadCSV(data, `${coinData.name}_history_${selectedDate}.csv`);
       } else {
         console.warn("Unexpected data format", data);
-        setCsvData([]);  // Set to empty array if the format is incorrect
+        setCsvData([]);
       }
     } catch (error) {
       console.error("Error downloading coin history", error);
@@ -137,9 +132,13 @@ const CoinDetails = () => {
         {coinData.name} ({coinData.symbol}) - Coin Details
       </Text>
 
+      {/* Back Button */}
+      <Button onClick={() => router.push("/")} mb={4}> {/* Adjust the path to your dashboard route */}
+        Back to Dashboard
+      </Button>
+
       {/* Date Input and Download CSV Button */}
       <Flex mb={4} justify="flex-end" align="center">
-        {/* Date Picker */}
         <Input
           type="date"
           value={selectedDate}
@@ -156,7 +155,7 @@ const CoinDetails = () => {
             aria-label="Download Coin History"
             icon={<FiDownload />}
             onClick={handleDownloadCoinHistory}
-            isDisabled={!selectedDate || csvLoading} // Disable if no date is selected or loading
+            isDisabled={!selectedDate || csvLoading}
           />
         )}
       </Flex>
