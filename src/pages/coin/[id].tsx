@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Flex, Text, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { Flex, Text, Table, Thead, Tbody, Tr, Th, Td, IconButton, CircularProgress, Input } from "@chakra-ui/react";
 import { api } from "../../services/apiClient";
 import { SEO } from "../../SEO/index";
 import { Header } from "../../components/Header";
+import { CSVLink } from "react-csv";
+import { FiDownload } from "react-icons/fi";
 
 // Define the shape of your coin data based on your API response
 interface CoinHistory {
@@ -27,15 +29,17 @@ interface CoinData {
   name: string;
   symbol: string;
   rank: number;
-  coinHistory: CoinHistory[]; // Update to reflect the array of coin history
+  coinHistory: CoinHistory[];
 }
-
 
 const CoinDetails = () => {
   const router = useRouter();
   const { id } = router.query;
   const [coinData, setCoinData] = useState<CoinData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [csvData, setCsvData] = useState<CoinHistory[]>([]); // Data for CSV download
+  const [csvLoading, setCsvLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(""); // State for the selected date
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -43,7 +47,6 @@ const CoinDetails = () => {
       const fetchCoinHistory = async () => {
         try {
           const { data } = await api.get(`/coins/coin-history/${id}`);
-          // console.log(data);
           setCoinData(data.coin[0]); // Assuming `data.coin` array
           setLoading(false);
         } catch (error: any) {
@@ -55,6 +58,18 @@ const CoinDetails = () => {
     }
   }, [id]);
 
+  // Fetch data for CSV download with the selected date
+  const handleDownloadCoinHistory = async () => {
+    setCsvLoading(true);
+    try {
+      const { data } = await api.get(`/coins/coin-history/download/${id}?date=${selectedDate}`);
+      setCsvData(data); // Save data for CSV
+    } catch (error) {
+      console.error("Error downloading coin history", error);
+    }
+    setCsvLoading(false);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -63,7 +78,6 @@ const CoinDetails = () => {
     return <p>No data found for this coin.</p>;
   }
 
-  // Render coin details using coinData
   return (
     <Flex w="100%" justify="center" flexDir={"column"}>
       <SEO title={`${coinData.name} Details`} />
@@ -71,6 +85,34 @@ const CoinDetails = () => {
       <Text fontSize="2xl" mb={4}>
         {coinData.name} ({coinData.symbol}) - Coin Details
       </Text>
+
+      {/* Date Input and Download CSV Button */}
+      <Flex mb={4} justify="flex-end" align="center">
+        {/* Date Picker */}
+        <Input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          placeholder="Select a date"
+          mr={4}
+          maxW="200px"
+        />
+
+        {csvLoading ? (
+          <CircularProgress isIndeterminate color="blue.200" />
+        ) : (
+          <CSVLink data={csvData} filename={`${coinData.name}_history_${selectedDate}.csv`}>
+            <IconButton
+              aria-label="Download Coin History"
+              icon={<FiDownload />}
+              onClick={handleDownloadCoinHistory}
+              isDisabled={!selectedDate || csvData.length === 0} // Disable if no date is selected
+            />
+            <Text ml="10px">Download Coin History</Text>
+          </CSVLink>
+        )}
+      </Flex>
+
       <Table variant="simple" size="sm">
         <Thead>
           <Tr>
