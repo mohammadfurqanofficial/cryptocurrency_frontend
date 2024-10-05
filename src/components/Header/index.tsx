@@ -79,7 +79,7 @@ export function Header({ page, setPage }: HeaderProps) {
         <Menu>
           <MenuButton as={IconButton} icon={<DiAptana fontSize={"25px"} />} />
           <MenuList>
-            <MenuItem onClick={() => router.push("/all-coins")}> {/* Link to All Coins page */}
+            <MenuItem onClick={() => router.push("/allcoins")}> {/* Link to All Coins page */}
               <Text>All Coins</Text>
             </MenuItem>
             <MenuItem onClick={handleLogOut}>
