@@ -86,6 +86,39 @@ const CoinDetails = () => {
     document.body.removeChild(link);
   };
 
+  // Fetch all data for CSV download with the selected date
+  const handleDownloadAllCoinHistory = async () => {
+    // Check if coinData is null
+    if (!coinData) {
+        console.error("coinData is not available.");
+        return; // Early return if coinData is not set
+    }
+
+    setCsvLoading(true);
+    try {
+        const response = await api.get(`/coins/coin-history/${id}`);
+
+        // Check if the response is successful
+        if (response.status === 200 && Array.isArray(response.data)) {
+            setCsvData(response.data); // Set CSV data if it's an array
+
+            // Download CSV file
+            downloadCSV(response.data, `${coinData.name}_history.csv`);
+        } else {
+            console.warn("Unexpected data format", response.data);
+            setCsvData([]); // Set to empty array if the format is incorrect
+        }
+    } catch (error: any) { // Use 'any' type for error
+        // Check if the error response is 404
+        if (error.response && error.response.status === 404) {
+            alert(error.response.data.message || "No data found for the selected date."); // Show alert with error message
+        } else {
+            console.error("Error downloading coin history", error);
+        }
+    }
+    setCsvLoading(false);
+};
+
   // Fetch data for CSV download with the selected date
   const handleDownloadCoinHistory = async () => {
     if (!selectedDate) {
@@ -160,6 +193,17 @@ const CoinDetails = () => {
             icon={<FiDownload />}
             onClick={handleDownloadCoinHistory}
             isDisabled={!selectedDate || csvLoading} // Disable if no date is selected or loading
+          />
+        )}
+        {/* Download all coins */}
+        {csvLoading ? (
+          <CircularProgress isIndeterminate color="blue.200" />
+        ) : (
+          <IconButton
+            aria-label="Download Coin History"
+            icon={<FiDownload />}
+            onClick={handleDownloadAllCoinHistory}
+            isDisabled={csvLoading} // Disable if no date is selected or loading
           />
         )}
       </Flex>
