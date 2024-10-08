@@ -86,38 +86,44 @@ const CoinDetails = () => {
     document.body.removeChild(link);
   };
 
-  // Fetch all data for CSV download with the selected date
-  const handleDownloadAllCoinHistory = async () => {
-    // Check if coinData is null
-    if (!coinData) {
-        console.error("coinData is not available.");
-        return; // Early return if coinData is not set
+  // Fetch all data for CSV download without a selected date (all history)
+const handleDownloadAllCoinHistory = async () => {
+  if (!coinData) {
+    console.error("coinData is not available.");
+    return; // Early return if coinData is not set
+  }
+
+  setCsvLoading(true);
+  try {
+    const response = await api.get(`/coins/coin-history/${id}`); // Make sure this is the correct API
+
+    // Check if the response is successful and the data format is correct
+    if (response.status === 200 && Array.isArray(response.data)) {
+      const allHistoryData = response.data.map((history: CoinHistory) => ({
+        price: history.price,
+        volume_24h: history.volume_24h,
+        percent_change_1h: history.percent_change_1h,
+        percent_change_24h: history.percent_change_24h,
+        percent_change_7d: history.percent_change_7d,
+        percent_change_30d: history.percent_change_30d,
+        percent_change_60d: history.percent_change_60d,
+        percent_change_90d: history.percent_change_90d,
+        market_cap: history.market_cap,
+        fully_diluted_market_cap: history.fully_diluted_market_cap,
+        lastUpdated: history.lastUpdated,
+      }));
+
+      // Download CSV file
+      downloadCSV(allHistoryData, `${coinData.name}_all_history.csv`);
+    } else {
+      console.warn("Unexpected data format", response.data);
     }
-
-    setCsvLoading(true);
-    try {
-        const response = await api.get(`/coins/coin-history/${id}`);
-
-        // Check if the response is successful
-        if (response.status === 200 && Array.isArray(response.data)) {
-            setCsvData(response.data); // Set CSV data if it's an array
-
-            // Download CSV file
-            downloadCSV(response.data, `${coinData.name}_history.csv`);
-        } else {
-            console.warn("Unexpected data format", response.data);
-            setCsvData([]); // Set to empty array if the format is incorrect
-        }
-    } catch (error: any) { // Use 'any' type for error
-        // Check if the error response is 404
-        if (error.response && error.response.status === 404) {
-            alert(error.response.data.message || "No data found for the selected date."); // Show alert with error message
-        } else {
-            console.error("Error downloading coin history", error);
-        }
-    }
-    setCsvLoading(false);
+  } catch (error: any) { // Use 'any' type for error
+    console.error("Error downloading all coin history", error);
+  }
+  setCsvLoading(false);
 };
+
 
   // Fetch data for CSV download with the selected date
   const handleDownloadCoinHistory = async () => {
@@ -200,14 +206,13 @@ const CoinDetails = () => {
           <CircularProgress isIndeterminate color="blue.200" />
         ) : (
           <IconButton
-            aria-label="Download Coin History"
+            aria-label="Download All History"
             icon={<FiDownload />}
             onClick={handleDownloadAllCoinHistory}
-            isDisabled={csvLoading} // Disable if no date is selected or loading
+            isDisabled={csvLoading} // Disable while loading
           >
-          Download All History
+            Download All History
           </IconButton>
-
         )}
       </Flex>
 
