@@ -204,7 +204,10 @@ const CoinDetails = () => {
             icon={<FiDownload />}
             onClick={handleDownloadAllCoinHistory}
             isDisabled={csvLoading} // Disable if no date is selected or loading
-          />
+          >
+          Download All History
+          </IconButton>
+
         )}
       </Flex>
 
