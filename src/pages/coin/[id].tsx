@@ -96,27 +96,27 @@ const CoinDetails = () => {
     setCsvAllLoading(true); // Use separate loading state for "All history" button
     try {
       const response = await api.get(`/coins/coin-history/${id}`);
+      console.log("Data formated response", response.data.coin[0]);
       // console.log("Coin history data", response.data.coinHistory);
       // Validate the response format
-      if (response.status === 200 && response.data && Array.isArray(response.data.coinHistory)) {
-        const allHistoryData = response.data.coinHistory.map((history: CoinHistory) => ({
-          price: history.price,
-          volume_24h: history.volume_24h,
-          percent_change_1h: history.percent_change_1h,
-          percent_change_24h: history.percent_change_24h,
-          percent_change_7d: history.percent_change_7d,
-          percent_change_30d: history.percent_change_30d,
-          percent_change_60d: history.percent_change_60d,
-          percent_change_90d: history.percent_change_90d,
-          market_cap: history.market_cap,
-          fully_diluted_market_cap: history.fully_diluted_market_cap,
-          lastUpdated: history.lastUpdated,
-        }));
-        console.log("Data formated response", response.data.coin);
-        downloadCSV(allHistoryData, `${coinData.name}_all_history.csv`);
-      } else {
-        console.warn("Unexpected data format or empty response", response.data.coin);
-      }
+      // if (response.status === 200 && response.data && Array.isArray(response.data.coinHistory)) {
+      //   const allHistoryData = response.data.coinHistory.map((history: CoinHistory) => ({
+      //     price: history.price,
+      //     volume_24h: history.volume_24h,
+      //     percent_change_1h: history.percent_change_1h,
+      //     percent_change_24h: history.percent_change_24h,
+      //     percent_change_7d: history.percent_change_7d,
+      //     percent_change_30d: history.percent_change_30d,
+      //     percent_change_60d: history.percent_change_60d,
+      //     percent_change_90d: history.percent_change_90d,
+      //     market_cap: history.market_cap,
+      //     fully_diluted_market_cap: history.fully_diluted_market_cap,
+      //     lastUpdated: history.lastUpdated,
+      //   }));
+      //   downloadCSV(allHistoryData, `${coinData.name}_all_history.csv`);
+      // } else {
+      //   console.warn("Unexpected data format or empty response", response.data.coin[0]);
+      // }
     } catch (error: any) {
       console.error("Error downloading all coin history", error);
     } finally {
