@@ -112,10 +112,10 @@ const CoinDetails = () => {
           fully_diluted_market_cap: history.fully_diluted_market_cap,
           lastUpdated: history.lastUpdated,
         }));
-        console.log("Data formated response", allHistoryData);
+        console.log("Data formated response", response.data.coin);
         downloadCSV(allHistoryData, `${coinData.name}_all_history.csv`);
       } else {
-        console.warn("Unexpected data format or empty response", response.data);
+        console.warn("Unexpected data format or empty response", response.data.coin);
       }
     } catch (error: any) {
       console.error("Error downloading all coin history", error);
