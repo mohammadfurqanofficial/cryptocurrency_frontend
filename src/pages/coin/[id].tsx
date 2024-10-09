@@ -87,43 +87,44 @@ const CoinDetails = () => {
   };
 
   // Fetch all data for CSV download without a selected date (all history)
-const handleDownloadAllCoinHistory = async () => {
-  if (!coinData) {
-    console.error("coinData is not available.");
-    return; // Early return if coinData is not set
-  }
-
-  setCsvLoading(true);
-  try {
-    const response = await api.get(`/coins/coin-history/${id}`); // Make sure this is the correct API
-
-    // Check if the response is successful and the data format is correct
-    if (response.status === 200 && Array.isArray(response.data)) {
-      const allHistoryData = response.data.map((history: CoinHistory) => ({
-        price: history.price,
-        volume_24h: history.volume_24h,
-        percent_change_1h: history.percent_change_1h,
-        percent_change_24h: history.percent_change_24h,
-        percent_change_7d: history.percent_change_7d,
-        percent_change_30d: history.percent_change_30d,
-        percent_change_60d: history.percent_change_60d,
-        percent_change_90d: history.percent_change_90d,
-        market_cap: history.market_cap,
-        fully_diluted_market_cap: history.fully_diluted_market_cap,
-        lastUpdated: history.lastUpdated,
-      }));
-
-      // Download CSV file
-      downloadCSV(allHistoryData, `${coinData.name}_all_history.csv`);
-    } else {
-      console.warn("Unexpected data format", response.data);
+  const handleDownloadAllCoinHistory = async () => {
+    if (!coinData) {
+      console.error("coinData is not available.");
+      return; // Early return if coinData is not set
     }
-  } catch (error: any) { // Use 'any' type for error
-    console.error("Error downloading all coin history", error);
-  }
-  setCsvLoading(false);
-};
-
+  
+    setCsvLoading(true);
+    try {
+      // Fetch the full coin history from your API endpoint
+      const response = await api.get(`/coins/coin-history/${id}/all`); // Assuming /all endpoint for full history
+  
+      // Validate the response format
+      if (response.status === 200 && response.data && Array.isArray(response.data.coinHistory)) {
+        const allHistoryData = response.data.coinHistory.map((history: CoinHistory) => ({
+          price: history.price,
+          volume_24h: history.volume_24h,
+          percent_change_1h: history.percent_change_1h,
+          percent_change_24h: history.percent_change_24h,
+          percent_change_7d: history.percent_change_7d,
+          percent_change_30d: history.percent_change_30d,
+          percent_change_60d: history.percent_change_60d,
+          percent_change_90d: history.percent_change_90d,
+          market_cap: history.market_cap,
+          fully_diluted_market_cap: history.fully_diluted_market_cap,
+          lastUpdated: history.lastUpdated,
+        }));
+  
+        // Download CSV file
+        downloadCSV(allHistoryData, `${coinData.name}_all_history.csv`);
+      } else {
+        console.warn("Unexpected data format or empty response", response.data);
+      }
+    } catch (error: any) {
+      console.error("Error downloading all coin history", error);
+    } finally {
+      setCsvLoading(false); // Ensure the loading state is reset
+    }
+  };
 
   // Fetch data for CSV download with the selected date
   const handleDownloadCoinHistory = async () => {
