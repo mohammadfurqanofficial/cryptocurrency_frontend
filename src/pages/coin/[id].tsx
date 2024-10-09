@@ -19,7 +19,6 @@ import { Header } from "../../components/Header";
 import { FiDownload } from "react-icons/fi";
 import { Parser } from 'json2csv'; // Import the json2csv library
 
-// Define the shape of your coin data based on your API response
 interface CoinHistory {
   _id: string;
   price: number;
@@ -50,7 +49,8 @@ const CoinDetails = () => {
   const [coinData, setCoinData] = useState<CoinData | null>(null);
   const [loading, setLoading] = useState(true);
   const [csvData, setCsvData] = useState<CoinHistory[]>([]); // Data for CSV download
-  const [csvLoading, setCsvLoading] = useState(false);
+  const [csvLoading, setCsvLoading] = useState(false); // Loading state for date-specific download
+  const [csvAllLoading, setCsvAllLoading] = useState(false); // Loading state for all history download
   const [selectedDate, setSelectedDate] = useState(""); // State for the selected date
   const [page, setPage] = useState(1);
 
@@ -93,11 +93,10 @@ const CoinDetails = () => {
       return; // Early return if coinData is not set
     }
   
-    setCsvLoading(true);
+    setCsvAllLoading(true); // Use separate loading state for "All history" button
     try {
-      // Fetch the full coin history from your API endpoint
-      const response = await api.get(`/coins/coin-history/${id}`); // Assuming /all endpoint for full history
-  
+      const response = await api.get(`/coins/coin-history/${id}`);
+
       // Validate the response format
       if (response.status === 200 && response.data && Array.isArray(response.data.coinHistory)) {
         const allHistoryData = response.data.coinHistory.map((history: CoinHistory) => ({
@@ -114,7 +113,6 @@ const CoinDetails = () => {
           lastUpdated: history.lastUpdated,
         }));
   
-        // Download CSV file
         downloadCSV(allHistoryData, `${coinData.name}_all_history.csv`);
       } else {
         console.warn("Unexpected data format or empty response", response.data);
@@ -122,7 +120,7 @@ const CoinDetails = () => {
     } catch (error: any) {
       console.error("Error downloading all coin history", error);
     } finally {
-      setCsvLoading(false); // Ensure the loading state is reset
+      setCsvAllLoading(false); // Ensure the loading state is reset
     }
   };
 
@@ -133,36 +131,32 @@ const CoinDetails = () => {
         return; // Early return if no date is selected
     }
 
-    // Check if coinData is null
     if (!coinData) {
         console.error("coinData is not available.");
-        return; // Early return if coinData is not set
+        return;
     }
 
     setCsvLoading(true);
     try {
         const response = await api.get(`/coins/coin-history/download/${id}?date=${selectedDate}`);
 
-        // Check if the response is successful
         if (response.status === 200 && Array.isArray(response.data)) {
-            setCsvData(response.data); // Set CSV data if it's an array
+            setCsvData(response.data);
 
-            // Download CSV file
             downloadCSV(response.data, `${coinData.name}_history_${selectedDate}.csv`);
         } else {
             console.warn("Unexpected data format", response.data);
-            setCsvData([]); // Set to empty array if the format is incorrect
+            setCsvData([]);
         }
-    } catch (error: any) { // Use 'any' type for error
-        // Check if the error response is 404
+    } catch (error: any) {
         if (error.response && error.response.status === 404) {
-            alert(error.response.data.message || "No data found for the selected date."); // Show alert with error message
+            alert(error.response.data.message || "No data found for the selected date.");
         } else {
             console.error("Error downloading coin history", error);
         }
     }
     setCsvLoading(false);
-};
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -199,21 +193,19 @@ const CoinDetails = () => {
             aria-label="Download Coin History"
             icon={<FiDownload />}
             onClick={handleDownloadCoinHistory}
-            isDisabled={!selectedDate || csvLoading} // Disable if no date is selected or loading
+            isDisabled={!selectedDate || csvLoading}
           />
         )}
-        {/* Download all coins */}
-        {csvLoading ? (
+
+        {csvAllLoading ? (
           <CircularProgress isIndeterminate color="blue.200" />
         ) : (
           <IconButton
             aria-label="Download All History"
             icon={<FiDownload />}
             onClick={handleDownloadAllCoinHistory}
-            isDisabled={csvLoading} // Disable while loading
-          >
-            Download All History
-          </IconButton>
+            isDisabled={csvAllLoading}
+          />
         )}
       </Flex>
 
