@@ -96,7 +96,7 @@ const CoinDetails = () => {
     setCsvAllLoading(true); // Use separate loading state for "All history" button
     try {
       const response = await api.get(`/coins/coin-history/${id}`);
-      console.log("Data formated response", response.data.coin[0]);
+      console.log("Data formated response", response.data.coin[0].coinHistory);
       // console.log("Coin history data", response.data.coinHistory);
       // Validate the response format
       // if (response.status === 200 && response.data && Array.isArray(response.data.coinHistory)) {
