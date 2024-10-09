@@ -219,6 +219,7 @@ const handleDownloadAllCoinHistory = async () => {
       <Table variant="simple" size="sm">
         <Thead>
           <Tr>
+            <Th>Symbol</Th>
             <Th>Price</Th>
             <Th>Volume (24h)</Th>
             <Th>Change (1hr)</Th>
@@ -235,6 +236,7 @@ const handleDownloadAllCoinHistory = async () => {
         <Tbody>
           {coinData.coinHistory.map((history) => (
             <Tr key={history._id}>
+              <Td>{coinData.symbol}</Td>
               <Td>${history?.price !== undefined ? history.price.toFixed(8) : "N/A"}</Td>
               <Td>${history?.volume_24h !== undefined ? history.volume_24h.toLocaleString() : "N/A"}</Td>
               <Td>{history?.percent_change_1h !== undefined ? history.percent_change_1h.toFixed(8) + "%" : "N/A"}</Td>
