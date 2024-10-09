@@ -54,20 +54,12 @@ const CoinDetails = () => {
   const [selectedDate, setSelectedDate] = useState(""); // State for the selected date
   const [page, setPage] = useState(1);
 
-  // In the useEffect for fetching coin history
   useEffect(() => {
     if (id) {
       const fetchCoinHistory = async () => {
         try {
           const { data } = await api.get(`/coins/coin-history/${id}`);
-
-          // Check if the response contains a valid 'coin' array
-          if (data && Array.isArray(data.coin) && data.coin.length > 0) {
-            setCoinData(data.coin[0]); // Assuming the history is in the first element of 'coin' array
-          } else {
-            console.warn("Unexpected data format or empty response", data);
-          }
-
+          setCoinData(data.coin[0]); // Assuming `data.coin` array
           setLoading(false);
         } catch (error: any) {
           console.error("Failed to fetch coin history:", error.message);
@@ -104,7 +96,7 @@ const CoinDetails = () => {
     setCsvAllLoading(true); // Use separate loading state for "All history" button
     try {
       const response = await api.get(`/coins/coin-history/${id}`);
-
+      console.log(response.data.coinHistory);
       // Validate the response format
       if (response.status === 200 && response.data && Array.isArray(response.data.coinHistory)) {
         const allHistoryData = response.data.coinHistory.map((history: CoinHistory) => ({
