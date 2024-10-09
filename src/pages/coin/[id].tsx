@@ -96,7 +96,7 @@ const CoinDetails = () => {
     setCsvAllLoading(true); // Use separate loading state for "All history" button
     try {
       const response = await api.get(`/coins/coin-history/${id}`);
-      console.log("Coin history data", response.data.coinHistory);
+      // console.log("Coin history data", response.data.coinHistory);
       // Validate the response format
       if (response.status === 200 && response.data && Array.isArray(response.data.coinHistory)) {
         const allHistoryData = response.data.coinHistory.map((history: CoinHistory) => ({
@@ -112,7 +112,7 @@ const CoinDetails = () => {
           fully_diluted_market_cap: history.fully_diluted_market_cap,
           lastUpdated: history.lastUpdated,
         }));
-  
+        console.log("Data formated response", allHistoryData);
         downloadCSV(allHistoryData, `${coinData.name}_all_history.csv`);
       } else {
         console.warn("Unexpected data format or empty response", response.data);
