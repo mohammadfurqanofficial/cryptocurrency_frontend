@@ -96,7 +96,7 @@ const CoinDetails = () => {
     setCsvLoading(true);
     try {
       // Fetch the full coin history from your API endpoint
-      const response = await api.get(`/coins/coin-history/${id}/all`); // Assuming /all endpoint for full history
+      const response = await api.get(`/coins/coin-history/${id}`); // Assuming /all endpoint for full history
   
       // Validate the response format
       if (response.status === 200 && response.data && Array.isArray(response.data.coinHistory)) {
