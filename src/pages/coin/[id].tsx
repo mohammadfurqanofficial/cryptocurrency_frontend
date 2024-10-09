@@ -235,14 +235,14 @@ const handleDownloadAllCoinHistory = async () => {
         <Tbody>
           {coinData.coinHistory.map((history) => (
             <Tr key={history._id}>
-              <Td>${history?.price !== undefined ? history.price.toFixed(3) : "N/A"}</Td>
+              <Td>${history?.price !== undefined ? history.price.toFixed(8) : "N/A"}</Td>
               <Td>${history?.volume_24h !== undefined ? history.volume_24h.toLocaleString() : "N/A"}</Td>
-              <Td>{history?.percent_change_1h !== undefined ? history.percent_change_1h.toFixed(3) + "%" : "N/A"}</Td>
-              <Td>{history?.percent_change_24h !== undefined ? history.percent_change_24h.toFixed(3) + "%" : "N/A"}</Td>
-              <Td>{history?.percent_change_7d !== undefined ? history.percent_change_7d.toFixed(3) + "%" : "N/A"}</Td>
-              <Td>{history?.percent_change_30d !== undefined ? history.percent_change_30d.toFixed(3) + "%" : "N/A"}</Td>
-              <Td>{history?.percent_change_60d !== undefined ? history.percent_change_60d.toFixed(3) + "%" : "N/A"}</Td>
-              <Td>{history?.percent_change_90d !== undefined ? history.percent_change_90d.toFixed(3) + "%" : "N/A"}</Td>
+              <Td>{history?.percent_change_1h !== undefined ? history.percent_change_1h.toFixed(8) + "%" : "N/A"}</Td>
+              <Td>{history?.percent_change_24h !== undefined ? history.percent_change_24h.toFixed(8) + "%" : "N/A"}</Td>
+              <Td>{history?.percent_change_7d !== undefined ? history.percent_change_7d.toFixed(8) + "%" : "N/A"}</Td>
+              <Td>{history?.percent_change_30d !== undefined ? history.percent_change_30d.toFixed(8) + "%" : "N/A"}</Td>
+              <Td>{history?.percent_change_60d !== undefined ? history.percent_change_60d.toFixed(8) + "%" : "N/A"}</Td>
+              <Td>{history?.percent_change_90d !== undefined ? history.percent_change_90d.toFixed(8) + "%" : "N/A"}</Td>
               <Td>${history?.market_cap !== undefined ? history.market_cap.toLocaleString() : "N/A"}</Td>
               <Td>${history?.fully_diluted_market_cap !== undefined ? history.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
               <Td>{history?.lastUpdated !== undefined ? history.lastUpdated.toLocaleString() : "N/A"}</Td>

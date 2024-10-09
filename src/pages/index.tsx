@@ -128,14 +128,14 @@ export default function FavoriteCoins() {
                     </Link>
                   </Td>
                   <Td>{coin.symbol}</Td>
-                  <Td>${coinHistory?.price !== undefined ? coinHistory.price.toFixed(3) : "N/A"}</Td>
+                  <Td>${coinHistory?.price !== undefined ? coinHistory.price.toFixed(8) : "N/A"}</Td>
                   <Td>${coinHistory?.volume_24h !== undefined ? coinHistory.volume_24h.toLocaleString() : "N/A"}</Td>
-                  <Td>{coinHistory?.percent_change_1h !== undefined ? coinHistory.percent_change_1h.toFixed(3) + "%" : "N/A"}</Td>
-                  <Td>{coinHistory?.percent_change_24h !== undefined ? coinHistory.percent_change_24h.toFixed(3) + "%" : "N/A"}</Td>
-                  <Td>{coinHistory?.percent_change_7d !== undefined ? coinHistory.percent_change_7d.toFixed(3) + "%" : "N/A"}</Td>
-                  <Td>{coinHistory?.percent_change_30d !== undefined ? coinHistory.percent_change_30d.toFixed(3) + "%" : "N/A"}</Td>
-                  <Td>{coinHistory?.percent_change_60d !== undefined ? coinHistory.percent_change_60d.toFixed(3) + "%" : "N/A"}</Td>
-                  <Td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(3) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_1h !== undefined ? coinHistory.percent_change_1h.toFixed(8) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_24h !== undefined ? coinHistory.percent_change_24h.toFixed(8) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_7d !== undefined ? coinHistory.percent_change_7d.toFixed(8) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_30d !== undefined ? coinHistory.percent_change_30d.toFixed(8) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_60d !== undefined ? coinHistory.percent_change_60d.toFixed(8) + "%" : "N/A"}</Td>
+                  <Td>{coinHistory?.percent_change_90d !== undefined ? coinHistory.percent_change_90d.toFixed(8) + "%" : "N/A"}</Td>
                   <Td>${coinHistory?.market_cap !== undefined ? coinHistory.market_cap.toLocaleString() : "N/A"}</Td>
                   <Td>${coinHistory?.fully_diluted_market_cap !== undefined ? coinHistory.fully_diluted_market_cap.toLocaleString() : "N/A"}</Td>
                   <Td>{coinHistory?.lastUpdated !== undefined ? coinHistory.lastUpdated.toLocaleString() : "N/A"}</Td>
