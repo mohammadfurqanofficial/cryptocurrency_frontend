@@ -97,11 +97,12 @@ const CoinDetails = () => {
     try {
       const response = await api.get(`/coins/coin-history/${id}`);
       const respone_data = response.data.coin[0].coinHistory;
-      // console.log("Data formated response", response.data.coin[0].coinHistory);
+      console.log("Data formated response", response.data.coin[0]);
       // console.log("Coin history data", response.data.coinHistory);
       // Validate the response format
       if (response.status === 200 && response.data && Array.isArray(respone_data)) {
         const allHistoryData = respone_data.map((history: CoinHistory) => ({
+          symbol: history.price,
           price: history.price,
           volume_24h: history.volume_24h,
           percent_change_1h: history.percent_change_1h,
